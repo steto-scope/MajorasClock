@@ -42,11 +42,11 @@
                     <Setter.Value>
                         <ControlTemplate>
                             <StackPanel>
-                                <Image Name="img" Source="pause.png" Width="16"/>
+                                <Image Name="img" Source="play.png" Width="16"/>
                             </StackPanel>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="ToggleButton.IsChecked" Value="True">
-                                    <Setter TargetName="img" Property="Source" Value="play.png"/>
+                                    <Setter TargetName="img" Property="Source" Value="pause.png"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -59,6 +59,17 @@
                         <ControlTemplate>
                             <StackPanel>
                                 <Image Name="img" Source="reset.png" Width="16"/>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="EditStyle" TargetType="Button">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <StackPanel>
+                                <Image Name="img" Source="edit.png" Width="16"/>
                             </StackPanel>
                         </ControlTemplate>
                     </Setter.Value>
@@ -78,10 +89,11 @@
                                 <RowDefinition Height="auto" />
                                 <RowDefinition Height="auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="{Binding Name}" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                            <TextBlock HorizontalAlignment="Left" Grid.Row="0" Text="{Binding Settings.Name}" FontSize="18"  VerticalAlignment="Top" />
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                <ToggleButton Content="Start/Stop" IsChecked="{Binding StartStop, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource PlayPauseStyle}" />
-                                <Button Content="Reset" Visibility="{Binding CanReset, Converter={StaticResource b2v}}" Style="{StaticResource ResetStyle}" />
+                                <ToggleButton Content="Start/Stop" IsChecked="{Binding StartStop, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource PlayPauseStyle}" Visibility="{Binding Settings.CanReset, Converter={StaticResource b2v}}" />
+                                <Button Content="Edit" Visibility="{Binding NotRunning, Converter={StaticResource b2v}}" Style="{StaticResource EditStyle}" Command="{Binding EditCommand}" />
+                                <Button Content="Reset" Visibility="{Binding Settings.CanReset, Converter={StaticResource b2v}}" Style="{StaticResource ResetStyle}" Command="{Binding ResetCommand}" />
                                 <ToggleButton Content="Notify" IsChecked="{Binding EnableNotifications}" Style="{StaticResource NotificationsStyle}" />
                                 <ToggleButton Content="Actions" IsChecked="{Binding EnableActions}" Style="{StaticResource ActionsStyle}" />
                             </StackPanel>

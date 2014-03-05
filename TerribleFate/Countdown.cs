@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace TerribleFate
 {
-    abstract class Countdown : BaseObject
+    class Countdown : BaseObject
     {
         /*public CountdownType Type
         {
@@ -15,39 +16,196 @@ namespace TerribleFate
             set { Set("Type", value); }
         }*/
 
-        public abstract void Start();
-        public abstract void Stop();
-        public abstract void Reset();
+        public CountdownSettings Settings
+        {
+            get { return Get<CountdownSettings>("Settings"); }
+            set { Set("Settings", value); OnPropertyChanged("CurrentEndDate"); OnPropertyChanged("Name"); }
+        }
 
-        public bool Running { get; set; }
+        public TimeSpan Left
+        {
+            get {
+                if(Settings.IsDurationCountdown)
+                    return TimeSpan.FromSeconds(Settings.Duration.TotalSeconds - Elapsed); 
+                else
+                {
+                    if ((Settings.EndDate - DateTime.Now).TotalSeconds < 0)
+                        return new TimeSpan();
+                    return Settings.EndDate - DateTime.Now; 
+                }
+            }
 
-        public abstract DateTime CurrentEndDate { get; }
+        }
 
+        public DateTime CurrentEndDate
+        {
+            get {
+                if (!Settings.IsDurationCountdown)
+                    return Settings.EndDate;
+                return DateTime.Now.Add(new TimeSpan(0, 0, (int)(Settings.Duration.TotalSeconds - Elapsed))); }
+        }
+
+        public long Elapsed
+        {
+            get { return Get<long>("Elapsed"); }
+            private set { Set("Elapsed", value); OnPropertyChanged("Left"); }
+        }
+
+        Task t;
+        CancellationTokenSource ct = new CancellationTokenSource();
+
+        public void Start()
+        {
+            ct = new CancellationTokenSource();
+            if(Settings.IsDurationCountdown)
+                t = Task.Run(() => CountDuration(ct.Token), ct.Token);
+            else
+                t = Task.Run(() => CountDate(ct.Token), ct.Token);
+        }
+
+        async Task CountDuration(CancellationToken tok)
+        {
+            Running = true;
+            while (Elapsed < Settings.Duration.TotalSeconds)
+            {
+                Elapsed++;
+                if (tok.IsCancellationRequested)
+                    break;
+                await Task.Delay(1000);
+            }
+            if (!(Elapsed < Settings.Duration.TotalSeconds) && EnableNotifications)
+                ShowNotifications();
+            if (!(Elapsed < Settings.Duration.TotalSeconds) && EnableActions)
+                ExecuteActions();
+
+            Running = false;
+        }
+
+        async Task CountDate(CancellationToken tok)
+        {
+            Running = true;
+            while (DateTime.Now < Settings.EndDate)
+            {
+                OnPropertyChanged("Left");
+                if (tok.IsCancellationRequested)
+                    break;
+                await Task.Delay(1000);
+            }
+            if (!(DateTime.Now < Settings.EndDate) && EnableNotifications)
+                ShowNotifications();
+            if (!(DateTime.Now < Settings.EndDate) && EnableActions)
+                ExecuteActions();
+
+            Running = false;
+        }
+
+        public void Stop()
+        {
+            ct.Cancel();
+        }
+
+        public void ResetCountdown()
+        {
+            if (Settings.CanReset)
+            {
+                Elapsed = 0;
+            }
+        }
+        public bool Running
+        {
+            get
+            {
+                return Get<bool>("Running");
+            }
+            set
+            {
+                Set("Running", value);
+                Set("NotRunning", !value);
+                OnPropertyChanged("StartStop");
+            }
+        }
+
+        public bool NotRunning
+        {
+            get { return Get<bool>("NotRunning"); }
+        }
+        
         public bool EnableNotifications { get; set; }
         public bool EnableActions { get; set; }
 
-        public abstract void ExecuteActions();
-        public abstract void ShowNotifications();
-
-        public virtual bool CanReset { get { return false; } }
-
-
-        public string Name
+        public void ExecuteActions()
         {
-            get { return Get<string>("Name"); }
-            set { Set("Name", value); }
+
         }
+        public void ShowNotifications()
+        {
+
+        }
+
+        private ICommand cmdReset;
+
+        public RelayCommand ResetCommand
+        {
+            get
+            {
+                if (cmdReset == null)
+                    cmdReset = new RelayCommand(p => Reset(p), p => CanReset(p));
+                return (RelayCommand)cmdReset;
+            }
+        }
+
+        public void Reset(object param)
+        {
+            ResetCountdown();
+        }
+
+        public bool CanReset(object param)
+        {
+            return Settings.CanReset;
+        }
+
+
+        private ICommand cmdEdit;
+
+        public RelayCommand EditCommand
+        {
+            get
+            {
+                if (cmdEdit == null)
+                    cmdEdit = new RelayCommand(p => Edit(p), p => CanEdit(p));
+                return (RelayCommand)cmdEdit;
+            }
+        }
+
+        public void Edit(object param)
+        {
+
+            EditWindow w = new EditWindow(Settings);
+            w.ShowDialog();
+            CountdownSettings s = w.Settings;
+            if(s!=null)
+            {
+                Settings = s;
+            }
+        }
+
+        public bool CanEdit(object param)
+        {
+            return NotRunning;
+        }
+
+
+        
         
         public bool StartStop
         {
             get
             {
-                return Get<bool>("startstop");
+                return Running;
             }
             set
             {
-                Set("startstop", value);
-                if (value)
+                if (Running)
                     Stop();
                 else
                     Start();

@@ -18,19 +18,22 @@ namespace TerribleFate
         public MainViewModel()
         {
             Countdowns = new ObservableCollection<Countdown>();
-            DurationCountdown dt = new DurationCountdown();
-            dt.Name = "Test-Countdown";
+            Countdown dt = new Countdown();
+           
             dt.EnableActions=true;
             dt.EnableNotifications = true;
-            dt.Duration = new TimeSpan(0, 0,10);
+            CountdownSettings s = new CountdownSettings() { Duration = new TimeSpan(0, 0, 10), IsDurationCountdown = true, Name = "tEst-Countdown" };
+            dt.Settings = s;
+            Countdowns.Add(dt);
 
-            DateCountdown ddt = new DateCountdown();
-            ddt.EndDate = new DateTime(2014, 3, 4, 3, 0, 0);
-            ddt.Name = "Date-Count";
+            Countdown ddt = new Countdown();
+            CountdownSettings s2 = new CountdownSettings() { EndDate = new DateTime(2014, 3, 5, 3, 0, 0) };
+            ddt.Settings = s2;
+            s2.Name = "Date-Count";
             ddt.EnableActions = true;
             Countdowns.Add(ddt);
 
-            Countdowns.Add(dt);
+            
             dt.Start();
             ddt.Start();
         }
