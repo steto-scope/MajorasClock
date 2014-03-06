@@ -60,7 +60,7 @@ namespace TerribleFate
                 this.values[key] = value;
 
             OnPropertyChanged(key);
-            Console.WriteLine(key + ":" + value);
+            //Console.WriteLine(key + ":" + value);
         }
 
         #endregion

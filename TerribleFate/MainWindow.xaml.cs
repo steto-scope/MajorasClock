@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -50,7 +51,7 @@ namespace TerribleFate
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
             MainViewModel mw = DataContext as MainViewModel;
-            if(e.LeftButton == MouseButtonState.Pressed && mw!=null && !mw.Locked)
+            if(e.LeftButton == MouseButtonState.Pressed && mw!=null && !mw.Config.Locked)
                 DragMove();
         }
 
@@ -122,9 +123,23 @@ namespace TerribleFate
             helper = null;
         }
 
+//        [DllImport("User32.dll")]
+        //static extern Int32 FindWindow(String lpClassName, String lpWindowName);
+
+        [DllImport("user32.dll")]
+        static extern int SetParent(int hWndChild, int hWndNewParent);
+        //[DllImport("user32.dll", CharSet = CharSet.Auto)]
+        
+        //public static extern IntPtr FindWindow([MarshalAs(UnmanagedType.LPTStr)] string lpClassName, [MarshalAs(UnmanagedType.LPTStr)] string lpWindowName); 
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             SetBottom(this);
+
+            //this.SendToBack();
+            IntPtr pWnd = FindWindow("Progman", null);
+            int tWnd = Process.GetCurrentProcess().MainWindowHandle.ToInt32();
+            SetParent(tWnd, pWnd.ToInt32());
         }
 
 

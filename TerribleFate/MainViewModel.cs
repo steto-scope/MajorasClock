@@ -19,32 +19,25 @@ namespace TerribleFate
             set { Set("Countdowns",value); }
         }
 
+        public AppSettings Config
+        {
+            get { return Get<AppSettings>("Config"); }
+            set { Set("Config", value); }
+        }
+
         public bool ShowInactive
         {
             get { return Get<bool>("ShowInactive"); }
             set { Set("ShowInactive", value); OnPropertyChanged("Countdowns"); }
         }
 
-        public bool Locked
-        {
-            get { return Get<bool>("Locked"); }
-            set { Set("Locked", value); OnPropertyChanged("HeaderColor"); }
-        }
+        
 
-        private static SolidColorBrush unlockedheader = new SolidColorBrush(Color.FromArgb(20, 255, 255, 255));
-        private static SolidColorBrush lockedheader = new SolidColorBrush(Colors.Transparent);
-        public Brush HeaderColor
-        {
-            get
-            {
-                if (Locked)
-                    return lockedheader;
-                return unlockedheader;
-            }
-        }
+       
 
         public MainViewModel()
         {
+            Config = new AppSettings();
             CountdownCollection = new ObservableCollection<Countdown>();
             CountdownCollection.CollectionChanged += Countdowns_CollectionChanged;
             
@@ -213,16 +206,46 @@ namespace TerribleFate
 
         public void Save()
         {
-            XmlSerializer s = new XmlSerializer(typeof(ObservableCollection<Countdown>),new Type[]{typeof(CountdownSettings)});
-            if (!Directory.Exists(App.ConfigSaveFilePath))
-                Directory.CreateDirectory(App.ConfigSaveFilePath);
-            Stream f = File.OpenWrite(App.CountdownSaveFile);
-            s.Serialize(f, CountdownCollection);
-            f.Close();
+            try
+            {
+                XmlSerializer s = new XmlSerializer(typeof(ObservableCollection<Countdown>), new Type[] { typeof(CountdownSettings) });
+                if (!Directory.Exists(App.ConfigSaveFilePath))
+                    Directory.CreateDirectory(App.ConfigSaveFilePath);
+                Stream f = File.OpenWrite(App.CountdownSaveFile);
+                s.Serialize(f, CountdownCollection);
+                f.Close();
+            }
+            catch { }
+
+            try
+            {
+                XmlSerializer s = new XmlSerializer(typeof(AppSettings));
+                if (!Directory.Exists(App.ConfigSaveFilePath))
+                    Directory.CreateDirectory(App.ConfigSaveFilePath);
+                Stream f = File.OpenWrite(App.ConfigSaveFile);
+                s.Serialize(f, Config);
+                f.Close();
+            }
+            catch { }
         }
 
         public void Load()
         {
+            try
+            {
+                if (File.Exists(App.ConfigSaveFile))
+                {
+                    using (Stream f = File.OpenRead(App.ConfigSaveFile))
+                    {
+                        XmlSerializer s = new XmlSerializer(typeof(AppSettings));
+                        var col = (AppSettings)s.Deserialize(f);
+                        Config = col;
+
+                        f.Close();
+                    }
+                }
+            }
+            catch { }
             try
             {
                 if (File.Exists(App.CountdownSaveFile))
@@ -242,9 +265,6 @@ namespace TerribleFate
 
                         f.Close();
                     }
-                    
-
-                    
                 }
             }
             catch { }

@@ -74,6 +74,7 @@
     <Compile Include="AboutBox.xaml.cs">
       <DependentUpon>AboutBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AppSettings.cs" />
     <Compile Include="CountdownSettings.cs" />
     <Compile Include="EditWindow.xaml.cs">
       <DependentUpon>EditWindow.xaml</DependentUpon>
@@ -170,6 +171,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="eject.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="unlock.png" />
+    <Resource Include="lock.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
