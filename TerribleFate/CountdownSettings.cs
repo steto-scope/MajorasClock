@@ -14,7 +14,7 @@ namespace TerribleFate
             Name = "Unbenannt";
             NotifyByOverlay = true;
             NotifyBySound = true;
-            SoundToPlay = AppDomain.CurrentDomain.BaseDirectory+ "sounds\\alarm.mp3";
+            SoundToPlay = AppDomain.CurrentDomain.BaseDirectory+ "sounds\\cuckoo.wav";
             NotifyBefore = new TimeSpan(0, 5, 0);
             UseDuration = true;
         }
@@ -29,8 +29,14 @@ namespace TerribleFate
 
         public string ExecuteString
         {
-            get { return Get<string>("execstring"); }
-            set { Set("execstring", value);}
+            get { return Get<string>("ExecuteString"); }
+            set { Set("ExecuteString", value); }
+        }
+
+        public string Description
+        {
+            get { return Get<string>("Description"); }
+            set { Set("Description", value); }
         }
 
         public TimeSpan NotifyBefore
@@ -42,38 +48,38 @@ namespace TerribleFate
 
         public bool NotifyBySound
         {
-            get { return Get<bool>("notifybysound"); }
-            set { Set("notifybysound", value);  }
+            get { return Get<bool>("NotifyBySound"); }
+            set { Set("NotifyBySound", value); }
         }
 
         public bool NotifyByTray
         {
-            get { return Get<bool>("notifybytray"); }
-            set { Set("notifybytray", value); }
+            get { return Get<bool>("NotifyByTray"); }
+            set { Set("NotifyByTray", value); }
         }
 
         public bool NotifyByOverlay
         {
-            get { return Get<bool>("notifybyoverlay"); }
-            set { Set("notifybyoverlay", value); }
+            get { return Get<bool>("NotifyByOverlay"); }
+            set { Set("NotifyByOverlay", value); }
         }
         public bool NotifyByOverlayFade
         {
-            get { return Get<bool>("notifybyoverlayfade"); }
-            set { Set("notifybyoverlayfade", value); }
+            get { return Get<bool>("NotifyByOverlayFade"); }
+            set { Set("NotifyByOverlayFade", value); }
         }
 
         public string SoundToPlay
         {
-            get { return Get<string>("soundtoplay"); }
-            set { Set("soundtoplay", value); }
+            get { return Get<string>("SoundToPlay"); }
+            set { Set("SoundToPlay", value); }
         }
 
 
         public bool NotifyBeforeStay
         {
-            get { return Get<bool>("notifybeforestay"); }
-            set { Set("notifybeforestay", value); }
+            get { return Get<bool>("NotifyBeforeStay"); }
+            set { Set("NotifyBeforeStay", value); }
         }
 
         public DateTime EndDate
@@ -84,8 +90,8 @@ namespace TerribleFate
 
         public TimeSpan Duration
         {
-            get { return Get<TimeSpan>("duration"); }
-            set { Set("duration", value); Set("UseDuration", true); Set("UseDate", false); }
+            get { return Get<TimeSpan>("Duration"); }
+            set { Set("Duration", value); Set("UseDuration", true); Set("UseDate", false); }
         }
 
         public bool UseDuration

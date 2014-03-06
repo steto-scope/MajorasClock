@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -72,37 +75,45 @@ namespace TerribleFate
 
         async Task CountDuration(CancellationToken tok)
         {
+            bool wasinloop = false;
             Running = true;
             while (Elapsed < Settings.Duration.TotalSeconds)
             {
+                wasinloop = true;
                 Elapsed++;
                 if (tok.IsCancellationRequested)
                     break;
                 await Task.Delay(1000);
             }
-            if (!(Elapsed < Settings.Duration.TotalSeconds) && EnableNotifications)
-                ShowNotifications();
-            if (!(Elapsed < Settings.Duration.TotalSeconds) && EnableActions)
-                ExecuteActions();
-
+            if (wasinloop)
+            {
+                if (!(Elapsed < Settings.Duration.TotalSeconds) && EnableNotifications)
+                    ShowNotifications();
+                if (!(Elapsed < Settings.Duration.TotalSeconds) && EnableActions)
+                    ExecuteActions();
+            }
             Running = false;
         }
 
         async Task CountDate(CancellationToken tok)
         {
+            bool wasinloop = false;
             Running = true;
             while (DateTime.Now < Settings.EndDate)
             {
+                wasinloop = true;
                 OnPropertyChanged("Left");
                 if (tok.IsCancellationRequested)
                     break;
                 await Task.Delay(1000);
             }
-            if (!(DateTime.Now < Settings.EndDate) && EnableNotifications)
-                ShowNotifications();
-            if (!(DateTime.Now < Settings.EndDate) && EnableActions)
-                ExecuteActions();
-
+            if (wasinloop)
+            {
+                if (!(DateTime.Now < Settings.EndDate) && EnableNotifications)
+                    ShowNotifications();
+                if (!(DateTime.Now < Settings.EndDate) && EnableActions)
+                    ExecuteActions();
+            }
             Running = false;
         }
 
@@ -136,17 +147,39 @@ namespace TerribleFate
         {
             get { return Get<bool>("NotRunning"); }
         }
-        
-        public bool EnableNotifications { get; set; }
-        public bool EnableActions { get; set; }
+
+        public bool EnableNotifications
+        {
+            get { return Get<bool>("EnableNotifications"); }
+            set { Set("EnableNotifications", value);  }
+        }
+        public bool EnableActions
+        {
+            get { return Get<bool>("EnableActions"); }
+            set { Set("EnableActions", value); }
+        }
 
         public void ExecuteActions()
         {
+            if (!EnableActions)
+                return;
 
+            if (Settings.ExecuteString != null)
+                Process.Start(Settings.ExecuteString);
         }
         public void ShowNotifications()
         {
+            if (!EnableNotifications)
+                return;
 
+            if(Settings.NotifyBySound && Settings.SoundToPlay!=null)
+            {
+                if(File.Exists(Settings.SoundToPlay))
+                {
+                    SoundPlayer player = new SoundPlayer(Settings.SoundToPlay);
+                    player.Play();
+                }
+            }
         }
 
         private ICommand cmdReset;

@@ -3,5 +3,40 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="AboutBox" Height="300" Width="300">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock FontSize="24" Text="TerribleFate"  />
+                <TextBlock Text="Version 1.0" />
+                <TextBlock>
+                    <Hyperlink Click="Hyperlink_Click">
+                        <TextBlock Text="http://terriblefate.codeplex.com" />
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="3rd Party Content used in this Software:" />
+            <StackPanel Margin="5">
+                <StackPanel>
+                    <TextBlock Text="Fugue Icons" />
+                    <TextBlock Text="by Yusuke Kamiyamane " />
+                    <TextBlock>
+                        <Hyperlink Click="Hyperlink_Click_1">
+                            <TextBlock Text="http://p.yusukekamiyamane.com/" />
+                        </Hyperlink>
+                     </TextBlock>
+                </StackPanel>
+                    
+            </StackPanel>
+            <TextBlock Text="Many thanks for your great work!" />
+        </StackPanel>
     </Grid>
 </Window>

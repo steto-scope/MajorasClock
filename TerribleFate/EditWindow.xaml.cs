@@ -32,8 +32,9 @@ namespace TerribleFate
 
         public EditWindow(CountdownSettings s)
         {
-            DataContext = s;
+            
             InitializeComponent();
+            DataContext = s;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -56,24 +57,23 @@ namespace TerribleFate
                 new FileDialogCustomPlace(AppDomain.CurrentDomain.BaseDirectory+"sounds\\"),
                 new FileDialogCustomPlace(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic))
             };
-            ofd.Filter = "Audio-Files|*.wav;*.mp3;*.mp4;*.wma";
+            ofd.Filter = "Audio-Files|*.wav";
             ofd.Multiselect = false;
             bool? result = ofd.ShowDialog();
             if(result.HasValue && result.Value)
             {
-                sndPath.Text = ofd.FileName;
+                ((CountdownSettings)DataContext).SoundToPlay = ofd.FileName;
             }
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Executable-Files|*.exe;*.bat;*.jar;*.com";
             ofd.Multiselect = false;
             bool? result = ofd.ShowDialog();
             if (result.HasValue && result.Value)
             {
-                execPath.Text = ofd.FileName;
+                ((CountdownSettings)DataContext).ExecuteString = ofd.FileName;
             }
         }
     }
