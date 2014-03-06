@@ -71,6 +71,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AboutBox.xaml.cs">
+      <DependentUpon>AboutBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CountdownSettings.cs" />
     <Compile Include="EditWindow.xaml.cs">
       <DependentUpon>EditWindow.xaml</DependentUpon>
@@ -78,6 +81,10 @@
     <Compile Include="RelayCommand.cs" />
     <Compile Include="StringToTimeSpanConverter.cs" />
     <Compile Include="TimeSpanToStringConverter.cs" />
+    <Page Include="AboutBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -149,13 +156,13 @@
     <Resource Include="edit.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="noedit.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="showinactive.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="hideinactive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="eject.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

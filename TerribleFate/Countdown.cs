@@ -193,6 +193,8 @@ namespace TerribleFate
             if(s!=null)
             {
                 Settings = s;
+                if (Settings.UseDate)
+                    Start();
             }
         }
 

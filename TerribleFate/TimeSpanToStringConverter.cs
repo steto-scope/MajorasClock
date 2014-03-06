@@ -16,7 +16,7 @@ namespace TerribleFate
                 TimeSpan s = (TimeSpan)value;
                 
                 if (s.TotalSeconds < 1)
-                    return "00:00";
+                    return " - ";
 
                 long[] t = new long[5];
                 t[0] = s.Seconds;
@@ -38,7 +38,7 @@ namespace TerribleFate
 
             }
 
-            return "00:00";
+            return " - ";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

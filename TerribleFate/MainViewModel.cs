@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace TerribleFate
 {
@@ -20,6 +21,24 @@ namespace TerribleFate
         {
             get { return Get<bool>("ShowInactive"); }
             set { Set("ShowInactive", value); OnPropertyChanged("Countdowns"); }
+        }
+
+        public bool Locked
+        {
+            get { return Get<bool>("Locked"); }
+            set { Set("Locked", value); OnPropertyChanged("HeaderColor"); }
+        }
+
+        private static SolidColorBrush unlockedheader = new SolidColorBrush(Color.FromArgb(20, 255, 255, 255));
+        private static SolidColorBrush lockedheader = new SolidColorBrush(Colors.Transparent);
+        public Brush HeaderColor
+        {
+            get
+            {
+                if (Locked)
+                    return lockedheader;
+                return unlockedheader;
+            }
         }
 
         public MainViewModel()
@@ -137,6 +156,58 @@ namespace TerribleFate
         {
             return true;
         }
+
+        private ICommand cmdClose;
+
+        public RelayCommand CloseCommand
+        {
+            get
+            {
+                if (cmdClose == null)
+                    cmdClose = new RelayCommand(p => Close(p), p => CanClose(p));
+                return (RelayCommand)cmdClose;
+            }
+        }
+
+        public void Close(object param)
+        {
+            if (CloseRequest != null)
+                CloseRequest(null, null);
+        }
+
+        public event EventHandler CloseRequest;
+
+        public bool CanClose(object param)
+        {
+            return true;
+        }
+
+
+        private ICommand cmdInfo;
+
+        public RelayCommand InfoCommand
+        {
+            get
+            {
+                if (cmdInfo == null)
+                    cmdInfo = new RelayCommand(p => Info(p), p => CanInfo(p));
+                return (RelayCommand)cmdInfo;
+            }
+        }
+
+        public void Info(object param)
+        {
+            AboutBox a = new AboutBox();
+            a.ShowDialog();
+        }
+
+        public bool CanInfo(object param)
+        {
+            return true;
+        }
+
+
+
 
 
     }
