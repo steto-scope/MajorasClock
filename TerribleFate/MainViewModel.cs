@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml.Serialization;
 
 namespace TerribleFate
 {
@@ -45,7 +47,9 @@ namespace TerribleFate
         {
             CountdownCollection = new ObservableCollection<Countdown>();
             CountdownCollection.CollectionChanged += Countdowns_CollectionChanged;
-            Countdown dt = new Countdown();
+            
+            
+            /*Countdown dt = new Countdown();
            
             dt.EnableActions=true;
             dt.EnableNotifications = true;
@@ -62,7 +66,7 @@ namespace TerribleFate
 
             
             dt.Start();
-            ddt.Start();
+            ddt.Start();*/
         }
 
         void Countdowns_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -207,8 +211,44 @@ namespace TerribleFate
         }
 
 
+        public void Save()
+        {
+            XmlSerializer s = new XmlSerializer(typeof(ObservableCollection<Countdown>),new Type[]{typeof(CountdownSettings)});
+            if (!Directory.Exists(App.ConfigSaveFilePath))
+                Directory.CreateDirectory(App.ConfigSaveFilePath);
+            Stream f = File.OpenWrite(App.CountdownSaveFile);
+            s.Serialize(f, CountdownCollection);
+            f.Close();
+        }
 
+        public void Load()
+        {
+            try
+            {
+                if (File.Exists(App.CountdownSaveFile))
+                {
+                    using(Stream f = File.OpenRead(App.CountdownSaveFile))
+                    {
+                        XmlSerializer s = new XmlSerializer(typeof(ObservableCollection<Countdown>), new Type[] { typeof(CountdownSettings) });
+                        var col = (ObservableCollection<Countdown>)s.Deserialize(f);
+                        foreach (var c in col)
+                        {
+                            CountdownCollection.Add(c);
+                        }
 
+                        foreach (var c in CountdownCollection)
+                            if (c.RunningSerialized)
+                                c.Start();
+
+                        f.Close();
+                    }
+                    
+
+                    
+                }
+            }
+            catch { }
+        }
 
     }
 }

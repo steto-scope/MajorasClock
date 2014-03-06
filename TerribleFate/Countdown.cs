@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml.Serialization;
 
 namespace TerribleFate
 {
-    class Countdown : BaseObject
+    public class Countdown : BaseObject
     {
         /*public CountdownType Type
         {
@@ -29,7 +30,7 @@ namespace TerribleFate
         public CountdownSettings Settings
         {
             get { return Get<CountdownSettings>("Settings"); }
-            set { Set("Settings", value); OnPropertyChanged("CurrentEndDate"); OnPropertyChanged("Name"); if (value.UseDate) Set("Running", true); }
+            set { Set("Settings", value); OnPropertyChanged("CurrentEndDate"); OnPropertyChanged("Name"); if (value.UseDate) Start(); }
         }
 
         public TimeSpan Left
@@ -58,7 +59,7 @@ namespace TerribleFate
         public long Elapsed
         {
             get { return Get<long>("Elapsed"); }
-            private set { Set("Elapsed", value); OnPropertyChanged("Left"); }
+            set { Set("Elapsed", value); OnPropertyChanged("Left"); }
         }
 
         Task t;
@@ -66,53 +67,66 @@ namespace TerribleFate
 
         public void Start()
         {
-            ct = new CancellationTokenSource();
-            if(Settings.UseDuration)
-                t = Task.Run(() => CountDuration(ct.Token), ct.Token);
-            else
-                t = Task.Run(() => CountDate(ct.Token), ct.Token);
+            if (NotRunning)
+            {
+
+                if (Settings.UseDate)
+                    if (!(Elapsed < Settings.Duration.TotalSeconds))
+                     return; 
+                if (Settings.UseDuration)
+                    if (!(Elapsed < Settings.Duration.TotalSeconds))
+                        return;
+
+                ct = new CancellationTokenSource();
+                var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
+                if (Settings.UseDuration)
+                    t = Task.Run(() => CountDuration(ct.Token), ct.Token).ContinueWith(r => Notify(), scheduler);
+                else
+                    t = Task.Run(() => CountDate(ct.Token), ct.Token).ContinueWith(r => Notify(), scheduler);
+
+            }
         }
 
-        async Task CountDuration(CancellationToken tok)
+        public void Notify()
         {
-            bool wasinloop = false;
-            Running = true;
-            while (Elapsed < Settings.Duration.TotalSeconds)
-            {
-                wasinloop = true;
-                Elapsed++;
-                if (tok.IsCancellationRequested)
-                    break;
-                await Task.Delay(1000);
-            }
-            if (wasinloop)
+            if (Settings.UseDuration)
             {
                 if (!(Elapsed < Settings.Duration.TotalSeconds) && EnableNotifications)
                     ShowNotifications();
                 if (!(Elapsed < Settings.Duration.TotalSeconds) && EnableActions)
                     ExecuteActions();
             }
-            Running = false;
-        }
-
-        async Task CountDate(CancellationToken tok)
-        {
-            bool wasinloop = false;
-            Running = true;
-            while (DateTime.Now < Settings.EndDate)
-            {
-                wasinloop = true;
-                OnPropertyChanged("Left");
-                if (tok.IsCancellationRequested)
-                    break;
-                await Task.Delay(1000);
-            }
-            if (wasinloop)
+            if(Settings.UseDate)
             {
                 if (!(DateTime.Now < Settings.EndDate) && EnableNotifications)
                     ShowNotifications();
                 if (!(DateTime.Now < Settings.EndDate) && EnableActions)
                     ExecuteActions();
+            }
+        }
+
+        async Task CountDuration(CancellationToken tok)
+        {
+            Running = true;
+            while (Elapsed < Settings.Duration.TotalSeconds)
+            {
+                Elapsed++;
+                if (tok.IsCancellationRequested)
+                    break;
+                await Task.Delay(1000);
+            }
+            Running = false;
+        }
+
+        async Task CountDate(CancellationToken tok)
+        {
+            Running = true;
+            while (DateTime.Now < Settings.EndDate)
+            {
+                OnPropertyChanged("Left");
+                if (tok.IsCancellationRequested)
+                    break;
+                await Task.Delay(1000);
             }
             Running = false;
         }
@@ -129,23 +143,34 @@ namespace TerribleFate
                 Elapsed = 0;
             }
         }
+
+        [XmlIgnore]
         public bool Running
         {
             get
             {
                 return Get<bool>("Running");
             }
-            set
+            private set
             {
                 Set("Running", value);
-                Set("NotRunning", !value);
                 OnPropertyChanged("StartStop");
+                OnPropertyChanged("NotRunning");
             }
         }
 
+        private bool runningserialized;
+        [XmlElement("Running")]
+        public bool RunningSerialized
+        {
+            get { return runningserialized || Running; }
+            set { runningserialized = value; }
+        }
+
+        [XmlIgnore]
         public bool NotRunning
         {
-            get { return Get<bool>("NotRunning"); }
+            get { return !Get<bool>("Running"); }
         }
 
         public bool EnableNotifications
@@ -179,6 +204,12 @@ namespace TerribleFate
                     SoundPlayer player = new SoundPlayer(Settings.SoundToPlay);
                     player.Play();
                 }
+            }
+
+            if(Settings.NotifyByOverlay)
+            {
+                Overlay o = new TerribleFate.Overlay(this);
+                o.Show();
             }
         }
 
@@ -238,7 +269,7 @@ namespace TerribleFate
 
 
         
-        
+        [XmlIgnore]
         public bool StartStop
         {
             get

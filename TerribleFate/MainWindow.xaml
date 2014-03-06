@@ -1,7 +1,7 @@
 ﻿<Window x:Class="TerribleFate.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:TerribleFate" WindowStyle="None"  AllowsTransparency="True" Background="Transparent"  
+        xmlns:local="clr-namespace:TerribleFate" WindowStyle="None"  AllowsTransparency="True" Background="Transparent"  Closing="window_Closing"
         Loaded="Window_Loaded" x:Name="window" SizeToContent="Height"
         Title="MainWindow" Height="350" Width="350">
     <Grid MouseDown="Grid_MouseDown" Background="{Binding HeaderColor}">
@@ -173,9 +173,9 @@
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
                                 <ToggleButton Content="Start/Stop" ToolTip="Countdown starten/anhalten" IsChecked="{Binding StartStop, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource PlayPauseStyle}" Visibility="{Binding Settings.UseDuration, Converter={StaticResource b2v}}" />
                                 <Button Content="Edit" ToolTip="Countdown bearbeiten"  Style="{StaticResource EditStyle}" Command="{Binding EditCommand}" />
-                                <Button Content="Reset" ToolTip="Countdown zurücksetzen" Visibility="{Binding Settings.UseDuration, Converter={StaticResource b2v}}" Style="{StaticResource ResetStyle}" Command="{Binding ResetCommand}" />
-                                <ToggleButton Content="Notify" ToolTip="Benachrichtigungen ein/aus" IsChecked="{Binding EnableNotifications}" Style="{StaticResource NotificationsStyle}" />
-                                <ToggleButton Content="Actions" ToolTip="Aktion ein/aus" IsChecked="{Binding EnableActions}" Style="{StaticResource ActionsStyle}" />
+                                <Button Content="Reset" ToolTip="Countdown zurücksetzen" Visibility="{Binding Settings.UseDuration, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Converter={StaticResource b2v}}" Style="{StaticResource ResetStyle}" Command="{Binding ResetCommand}" />
+                                <ToggleButton Content="Notify" ToolTip="Benachrichtigungen ein/aus" IsChecked="{Binding EnableNotifications, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource NotificationsStyle}" />
+                                <ToggleButton Content="Actions" ToolTip="Aktion ein/aus" IsChecked="{Binding EnableActions, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource ActionsStyle}" />
                                 <Button Margin="20,0,0,0" ToolTip="Countdown löschen" Content="Delete" Style="{StaticResource DeleteStyle}" Command="{Binding RelativeSource={RelativeSource FindAncestor, 
 AncestorType={x:Type ListView}}, Path=DataContext.DeleteCommand}" CommandParameter="{Binding .}" />
                             </StackPanel>

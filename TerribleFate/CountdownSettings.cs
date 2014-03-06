@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace TerribleFate
 {
@@ -88,10 +89,18 @@ namespace TerribleFate
             set { Set("EndDate", value); Set("UseDate", true); Set("UseDuration", false); }
         }
 
+        [XmlIgnore]
         public TimeSpan Duration
         {
             get { return Get<TimeSpan>("Duration"); }
             set { Set("Duration", value); Set("UseDuration", true); Set("UseDate", false); }
+        }
+
+        [XmlElement("Duration")]
+        public long DurationTicks
+        {
+            get { return Duration.Ticks; }
+            set { Duration = new TimeSpan(value); }
         }
 
         public bool UseDuration

@@ -30,6 +30,7 @@ namespace TerribleFate
         public MainWindow()
         {
             var mw = new MainViewModel();
+            mw.Load();
             mw.CloseRequest += mw_CloseRequest;
             DataContext = mw;
 
@@ -129,5 +130,14 @@ namespace TerribleFate
 
 
         #endregion
+
+        private void window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MainViewModel mw = DataContext as MainViewModel;
+            if(mw!=null)
+            {
+                mw.Save();
+            }
+        }
     }
 }

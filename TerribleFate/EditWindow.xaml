@@ -47,8 +47,8 @@
                     <TextBox Width="170" Text="{Binding SoundToPlay, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Name="sndPath" />
                     <Button Content="Durchsuchen" Click="Button_Click_2" />
                 </StackPanel>
-                <!--<CheckBox Content="Tray-Benachrichtigung" IsChecked="{Binding NotifyByTray}" />
-                <CheckBox Content="Overlay-Benachrichtigung" IsChecked="{Binding NotifyByOverlay}" />-->
+                <!--<CheckBox Content="Tray-Benachrichtigung" IsChecked="{Binding NotifyByTray}" />-->
+                <CheckBox Content="Overlay-Benachrichtigung" IsChecked="{Binding NotifyByOverlay}" />
                 <!--<Separator />
                 <StackPanel Orientation="Horizontal" >
                     <CheckBox Content="Benachrichtige vorher " />
