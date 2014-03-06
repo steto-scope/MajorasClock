@@ -16,16 +16,23 @@ namespace TerribleFate
             set { Set("Type", value); }
         }*/
 
+        public Countdown()
+        {
+            EnableNotifications = true;
+            EnableActions = true;
+            Running = false;
+        }
+
         public CountdownSettings Settings
         {
             get { return Get<CountdownSettings>("Settings"); }
-            set { Set("Settings", value); OnPropertyChanged("CurrentEndDate"); OnPropertyChanged("Name"); }
+            set { Set("Settings", value); OnPropertyChanged("CurrentEndDate"); OnPropertyChanged("Name"); if (value.UseDate) Set("Running", true); }
         }
 
         public TimeSpan Left
         {
             get {
-                if(Settings.IsDurationCountdown)
+                if(Settings.UseDuration)
                     return TimeSpan.FromSeconds(Settings.Duration.TotalSeconds - Elapsed); 
                 else
                 {
@@ -40,7 +47,7 @@ namespace TerribleFate
         public DateTime CurrentEndDate
         {
             get {
-                if (!Settings.IsDurationCountdown)
+                if (Settings.UseDate)
                     return Settings.EndDate;
                 return DateTime.Now.Add(new TimeSpan(0, 0, (int)(Settings.Duration.TotalSeconds - Elapsed))); }
         }
@@ -57,7 +64,7 @@ namespace TerribleFate
         public void Start()
         {
             ct = new CancellationTokenSource();
-            if(Settings.IsDurationCountdown)
+            if(Settings.UseDuration)
                 t = Task.Run(() => CountDuration(ct.Token), ct.Token);
             else
                 t = Task.Run(() => CountDate(ct.Token), ct.Token);
@@ -106,7 +113,7 @@ namespace TerribleFate
 
         public void ResetCountdown()
         {
-            if (Settings.CanReset)
+            if (Settings.UseDuration)
             {
                 Elapsed = 0;
             }
@@ -161,7 +168,7 @@ namespace TerribleFate
 
         public bool CanReset(object param)
         {
-            return Settings.CanReset;
+            return Settings.UseDuration;
         }
 
 
@@ -191,7 +198,7 @@ namespace TerribleFate
 
         public bool CanEdit(object param)
         {
-            return NotRunning;
+            return true;
         }
 
 

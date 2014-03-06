@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,15 @@ namespace TerribleFate
 {
     public class CountdownSettings : BaseObject
     {
-
+        public CountdownSettings()
+        {
+            Name = "Unbenannt";
+            NotifyByOverlay = true;
+            NotifyBySound = true;
+            SoundToPlay = AppDomain.CurrentDomain.BaseDirectory+ "sounds\\alarm.mp3";
+            NotifyBefore = new TimeSpan(0, 5, 0);
+            UseDuration = true;
+        }
 
         public string Name
         {
@@ -16,16 +25,7 @@ namespace TerribleFate
             set { Set("Name", value); }
         }
 
-        public bool IsDurationCountdown
-        {
-            get { return Get<bool>("isduration"); }
-            set { Set("isduration", value); Set("canreset", value); }
-        }
 
-        public bool CanReset
-        {
-            get { return Get<bool>("canreset"); }
-        }
 
         public string ExecuteString
         {
@@ -33,10 +33,10 @@ namespace TerribleFate
             set { Set("execstring", value);}
         }
 
-        public int NotifyBefore
+        public TimeSpan NotifyBefore
         {
-            get { return Get<int>("notifybefore"); }
-            set { Set("notifybefore", value);  }
+            get { return Get<TimeSpan>("NotifyBefore"); }
+            set { Set("NotifyBefore", value);  }
         }
 
 
@@ -94,7 +94,7 @@ namespace TerribleFate
             {
                 return Get<bool>("UseDuration");
             }
-            set { Set("UseDuration", value); Set("UseDate", false); }
+            set { Set("UseDuration", value); Set("UseDate", !value);  }
         }
 
         public bool UseDate
@@ -103,7 +103,7 @@ namespace TerribleFate
             {
                 return Get<bool>("UseDate");
             }
-            set { Set("UseDate", value); Set("UseDuration", false); }
+            set { Set("UseDate", value); Set("UseDuration", !value);  }
         }
     }
 }

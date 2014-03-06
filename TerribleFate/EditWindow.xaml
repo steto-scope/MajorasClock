@@ -27,7 +27,7 @@
             <Grid Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
                     <CheckBox Content="Intervall" IsChecked="{Binding UseDuration,Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"/>
@@ -35,7 +35,7 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <CheckBox Content="Datum" IsChecked="{Binding UseDate,Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"/>
-                    <t:DateTimePicker Value="{Binding EndDate}" />
+                    <t:DateTimePicker Value="{Binding EndDate}" Name="datetimepicker" />
                 </StackPanel>
             </Grid>
             </StackPanel>
@@ -50,11 +50,9 @@
                 <CheckBox Content="Tray-Benachrichtigung" IsChecked="{Binding NotifyByTray}" />
                 <CheckBox Content="Overlay-Benachrichtigung" IsChecked="{Binding NotifyByOverlay}" />
                 <Separator />
-                <CheckBox Content="Benachrichtige vorher" />
-                <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
-                    <TextBlock Text="Zeit: " />
-                    <TextBox Width="50" Text="{Binding NotifyBefore}" />
-                    <TextBlock Text="min" />
+                <StackPanel Orientation="Horizontal" >
+                    <CheckBox Content="Benachrichtige vorher " />
+                    <t:TimePicker  Width="120" Value="{Binding NotifyBefore, Converter={StaticResource stsp}}" />
                 </StackPanel>
                 <CheckBox Content="Blende Benachrichtigung automatisch aus" IsChecked="{Binding NotifyByOverlayFade}" />
             </StackPanel>
@@ -62,8 +60,8 @@
         <GroupBox Header="Aktion" Grid.Row="2" Margin="5">
             <StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock Text="Programm:" />
-                <TextBox Width="170" Text="{Binding ExecuteString}" />
-                <Button Content="Durchsuchen" />
+                <TextBox Width="170" Text="{Binding ExecuteString}" Name="execPath" />
+                <Button Content="Durchsuchen" Click="Button_Click_3" />
             </StackPanel>
         </GroupBox>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">

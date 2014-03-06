@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace TerribleFate
         {
             DataContext = new CountdownSettings();
             InitializeComponent();
+            datetimepicker.Value = DateTime.Now;
         }
 
         public CountdownSettings Settings { get; private set; }
@@ -48,12 +50,30 @@ namespace TerribleFate
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
+            ofd.CustomPlaces = new List<FileDialogCustomPlace>()
+            {
+                new FileDialogCustomPlace(@"C:\Windows\Media\"),
+                new FileDialogCustomPlace(AppDomain.CurrentDomain.BaseDirectory+"sounds\\"),
+                new FileDialogCustomPlace(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic))
+            };
             ofd.Filter = "Audio-Files|*.wav;*.mp3;*.mp4;*.wma";
             ofd.Multiselect = false;
             bool? result = ofd.ShowDialog();
             if(result.HasValue && result.Value)
             {
                 sndPath.Text = ofd.FileName;
+            }
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Executable-Files|*.exe;*.bat;*.jar;*.com";
+            ofd.Multiselect = false;
+            bool? result = ofd.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                execPath.Text = ofd.FileName;
             }
         }
     }

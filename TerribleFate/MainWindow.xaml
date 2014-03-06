@@ -1,10 +1,12 @@
 ﻿<Window x:Class="TerribleFate.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:TerribleFate"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key="b2v" />
+            <local:TimeSpanToStringConverter x:Key="tsts" />
             <Style x:Key="ActionsStyle" TargetType="ToggleButton">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -31,6 +33,22 @@
                             <ControlTemplate.Triggers>
                                 <Trigger Property="ToggleButton.IsChecked" Value="True">
                                     <Setter TargetName="img" Property="Source" Value="notify.png"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="InactiveStyle" TargetType="ToggleButton">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <StackPanel>
+                                <Image Name="img" Source="showinactive.png" Width="24"/>
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                    <Setter TargetName="img" Property="Source" Value="hideinactive.png"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -64,6 +82,17 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style x:Key="NewStyle" TargetType="Button">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <StackPanel>
+                                <Image Name="img" Source="new.png" Width="24"/>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <Style x:Key="EditStyle" TargetType="Button">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -75,31 +104,64 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style x:Key="DeleteStyle" TargetType="Button">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <StackPanel>
+                                <Image Name="img" Source="delete.png" Width="16"/>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </Grid.Resources>
-        <ListView ItemsSource="{Binding Countdowns}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <ToggleButton Content="Show" ToolTip="Zeige/Verstecke inaktive Countdowns" IsChecked="{Binding ShowInactive, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" Style="{StaticResource InactiveStyle}"></ToggleButton>
+                <Button Content="Neu" ToolTip="Neuen Countdown erstellen" Command="{Binding NewCountdownCommand}" Style="{StaticResource NewStyle}"></Button>
+            </StackPanel>
+        </Grid>
+        <ListView ItemsSource="{Binding Countdowns}" Grid.Row="1" >
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate DataType="ListViewItem">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0" >
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <TextBlock HorizontalAlignment="Left" Grid.Row="0" Text="{Binding Settings.Name}" FontSize="18"  VerticalAlignment="Top" />
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                <ToggleButton Content="Start/Stop" IsChecked="{Binding StartStop, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource PlayPauseStyle}" Visibility="{Binding Settings.CanReset, Converter={StaticResource b2v}}" />
-                                <Button Content="Edit" Visibility="{Binding NotRunning, Converter={StaticResource b2v}}" Style="{StaticResource EditStyle}" Command="{Binding EditCommand}" />
-                                <Button Content="Reset" Visibility="{Binding Settings.CanReset, Converter={StaticResource b2v}}" Style="{StaticResource ResetStyle}" Command="{Binding ResetCommand}" />
-                                <ToggleButton Content="Notify" IsChecked="{Binding EnableNotifications}" Style="{StaticResource NotificationsStyle}" />
-                                <ToggleButton Content="Actions" IsChecked="{Binding EnableActions}" Style="{StaticResource ActionsStyle}" />
+                                <ToggleButton Content="Start/Stop" ToolTip="Countdown starten/anhalten" IsChecked="{Binding StartStop, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource PlayPauseStyle}" Visibility="{Binding Settings.UseDuration, Converter={StaticResource b2v}}" />
+                                <Button Content="Edit" ToolTip="Countdown bearbeiten"  Style="{StaticResource EditStyle}" Command="{Binding EditCommand}" />
+                                <Button Content="Reset" ToolTip="Countdown zurücksetzen" Visibility="{Binding Settings.UseDuration, Converter={StaticResource b2v}}" Style="{StaticResource ResetStyle}" Command="{Binding ResetCommand}" />
+                                <ToggleButton Content="Notify" ToolTip="Benachrichtigungen ein/aus" IsChecked="{Binding EnableNotifications}" Style="{StaticResource NotificationsStyle}" />
+                                <ToggleButton Content="Actions" ToolTip="Aktion ein/aus" IsChecked="{Binding EnableActions}" Style="{StaticResource ActionsStyle}" />
+                                <Button Margin="20,0,0,0" ToolTip="Countdown löschen" Content="Delete" Style="{StaticResource DeleteStyle}" Command="{Binding RelativeSource={RelativeSource FindAncestor, 
+AncestorType={x:Type ListView}}, Path=DataContext.DeleteCommand}" CommandParameter="{Binding .}" />
                             </StackPanel>
                         </Grid>
                         <StackPanel Grid.Column="1">
-                            <TextBlock Text="{Binding Left}"  HorizontalAlignment="Right" FontSize="24" />
+                            <TextBlock Text="{Binding Left, Converter={StaticResource tsts}}"  HorizontalAlignment="Right" FontSize="28" />
                             <TextBlock Text="{Binding CurrentEndDate}" HorizontalAlignment="Right" />
                         </StackPanel>
                         
@@ -108,5 +170,6 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        
     </Grid>
 </Window>

@@ -20,6 +20,10 @@ namespace TerribleFate
     /// </summary>
     public partial class MainWindow : Window
     {
+        //TODO Logo
+        //TODO Kontextmenü
+        //TODO Drag
+       
         public MainWindow()
         {
             DataContext = new MainViewModel();
