@@ -1,8 +1,8 @@
 ﻿<Window x:Class="TerribleFate.EditWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:t="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:local="clr-namespace:TerribleFate" SizeToContent="WidthAndHeight"
+        xmlns:t="http://schemas.xceed.com/wpf/xaml/toolkit" WindowStyle="ToolWindow"
+        xmlns:local="clr-namespace:TerribleFate" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen"
         Title="EditWindow" >
     <Grid Margin="5">
         <Grid.Resources>

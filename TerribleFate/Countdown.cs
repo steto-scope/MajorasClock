@@ -33,6 +33,12 @@ namespace TerribleFate
             set { Set("Settings", value); OnPropertyChanged("CurrentEndDate"); OnPropertyChanged("Name"); if (value.UseDate) Start(); }
         }
 
+        public bool IsMouseOver
+        {
+            get { return Get<bool>("IsMouseOver"); }
+            set { Set("IsMouseOver", value); }
+        }
+
         public TimeSpan Left
         {
             get {
@@ -71,7 +77,7 @@ namespace TerribleFate
             {
 
                 if (Settings.UseDate)
-                    if (!(Elapsed < Settings.Duration.TotalSeconds))
+                    if (!(Elapsed < (Settings.EndDate-DateTime.Now).TotalSeconds))
                      return; 
                 if (Settings.UseDuration)
                     if (!(Elapsed < Settings.Duration.TotalSeconds))

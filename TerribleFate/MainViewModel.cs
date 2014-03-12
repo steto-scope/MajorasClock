@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 
 namespace TerribleFate
 {
-    class MainViewModel : BaseObject
+    public class MainViewModel : BaseObject
     {
         private ObservableCollection<Countdown> CountdownCollection
         {
@@ -31,7 +31,11 @@ namespace TerribleFate
             set { Set("ShowInactive", value); OnPropertyChanged("Countdowns"); }
         }
 
-        
+        public bool IsMouseOver
+        {
+            get { return Get<bool>("IsMouseOver"); }
+            set { Set("IsMouseOver", value);  }
+        }
 
        
 
@@ -211,6 +215,8 @@ namespace TerribleFate
                 XmlSerializer s = new XmlSerializer(typeof(ObservableCollection<Countdown>), new Type[] { typeof(CountdownSettings) });
                 if (!Directory.Exists(App.ConfigSaveFilePath))
                     Directory.CreateDirectory(App.ConfigSaveFilePath);
+
+                File.Delete(App.ConfigSaveFilePath);
                 Stream f = File.OpenWrite(App.CountdownSaveFile);
                 s.Serialize(f, CountdownCollection);
                 f.Close();
@@ -222,6 +228,7 @@ namespace TerribleFate
                 XmlSerializer s = new XmlSerializer(typeof(AppSettings));
                 if (!Directory.Exists(App.ConfigSaveFilePath))
                     Directory.CreateDirectory(App.ConfigSaveFilePath);
+                File.Delete(App.ConfigSaveFile);
                 Stream f = File.OpenWrite(App.ConfigSaveFile);
                 s.Serialize(f, Config);
                 f.Close();

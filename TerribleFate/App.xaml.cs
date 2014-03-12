@@ -13,30 +13,17 @@ namespace TerribleFate
     /// </summary>
     public partial class App : Application
     {
+        static App()
+        {
+            ConfigSaveFilePath = Environment.GetEnvironmentVariable("LocalAppData")+"\\MajorasClock";
+            CountdownSaveFile = ConfigSaveFilePath+"\\countdowns.xml";
+            ConfigSaveFile = ConfigSaveFilePath+ "\\config.xml";                
+        }
 
         public static string CountdownSaveFile { get; private set; }
         public static string ConfigSaveFile { get; private set; }
 
         public static string ConfigSaveFilePath { get; private set; }
 
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            if (e.Args != null && e.Args.Contains("-portable"))
-            {
-                CountdownSaveFile = "countdowns.xml";
-                ConfigSaveFile = "config.xml";
-                ConfigSaveFilePath = "";
-            }
-            else
-            {
-                ConfigSaveFilePath = Environment.GetEnvironmentVariable("LocalAppData")+"\\MajorasClock";
-                CountdownSaveFile = ConfigSaveFilePath+"\\countdowns.xml";
-                ConfigSaveFile = ConfigSaveFilePath+ "\\config.xml";
-                
-            }
-
-
-            base.OnStartup(e);
-        }
     }
 }
