@@ -14,11 +14,6 @@ namespace TerribleFate
 {
     public class Countdown : BaseObject
     {
-        /*public CountdownType Type
-        {
-            get { return Get<CountdownType>("Type"); }
-            set { Set("Type", value); }
-        }*/
 
         public Countdown()
         {
@@ -81,7 +76,7 @@ namespace TerribleFate
                      return; 
                 if (Settings.UseDuration)
                     if (!(Elapsed < Settings.Duration.TotalSeconds))
-                        return;
+                        ResetCountdown();
 
                 ct = new CancellationTokenSource();
                 var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
@@ -207,7 +202,7 @@ namespace TerribleFate
             {
                 if(File.Exists(Settings.SoundToPlay))
                 {
-                    SoundPlayer player = new SoundPlayer(Settings.SoundToPlay);
+                    player = new SoundPlayer(Settings.SoundToPlay);
                     player.Play();
                 }
             }
@@ -218,6 +213,8 @@ namespace TerribleFate
                 o.Show();
             }
         }
+
+        SoundPlayer player;
 
         private ICommand cmdReset;
 
@@ -241,6 +238,11 @@ namespace TerribleFate
             return Settings.UseDuration;
         }
 
+        public void StopSound()
+        {
+            if (player != null)
+                player.Stop();
+        }
 
         private ICommand cmdEdit;
 
@@ -293,9 +295,4 @@ namespace TerribleFate
 
     }
 
-    /*
-    enum CountdownType
-    {
-        ToDate, Duration
-    }*/
 }

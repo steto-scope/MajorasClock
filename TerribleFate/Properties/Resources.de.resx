@@ -118,84 +118,84 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Action" xml:space="preserve">
-    <value>Action</value>
+    <value>Aktion</value>
   </data>
   <data name="AddCountdown" xml:space="preserve">
-    <value>Add a new Countdown</value>
+    <value>Neuer Countdown</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>Browse...</value>
+    <value>Durchsuchen...</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
   </data>
   <data name="CountdownType" xml:space="preserve">
-    <value>Countdown-Type</value>
+    <value>Countdown-Typ</value>
   </data>
   <data name="Date" xml:space="preserve">
-    <value>Date</value>
+    <value>Datum</value>
   </data>
   <data name="DeleteCountdown" xml:space="preserve">
-    <value>Delete Countdown</value>
+    <value>Countdown löschen</value>
   </data>
   <data name="EditCountdown" xml:space="preserve">
-    <value>Edit Countdown</value>
+    <value>Countdown bearbeiten</value>
   </data>
   <data name="EditWindow" xml:space="preserve">
-    <value>Add or Edit Countdown</value>
+    <value>Countdown hinzufügen oder bearbeiten</value>
   </data>
   <data name="EnableExec" xml:space="preserve">
-    <value>Execute Action on/off</value>
+    <value>Aktion an/aus</value>
   </data>
   <data name="EnableNotify" xml:space="preserve">
-    <value>Notifications on/off</value>
+    <value>Benachrichtigung an/aus</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Beenden</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>About...</value>
+    <value>Über das Programm...</value>
   </data>
   <data name="Interval" xml:space="preserve">
-    <value>Interval</value>
+    <value>Intervall</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Lock User Interface</value>
+    <value>Benutzerinterface sperren</value>
   </data>
   <data name="MuteAll" xml:space="preserve">
-    <value>Stop all playing Notifications</value>
+    <value>Gerade spielende Audio-Benachrichtigungen beenden</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name:</value>
   </data>
   <data name="Notification" xml:space="preserve">
-    <value>Notification</value>
+    <value>Benachrichtigung</value>
   </data>
   <data name="OverlayNotify" xml:space="preserve">
-    <value>Overlay Notification</value>
+    <value>Visuelle Benachrichtigung</value>
   </data>
   <data name="PlaySound" xml:space="preserve">
-    <value>Play a sound</value>
+    <value>Spiele Sound ab</value>
   </data>
   <data name="Program" xml:space="preserve">
-    <value>Program:</value>
+    <value>Programm:</value>
   </data>
   <data name="ResetCountdown" xml:space="preserve">
-    <value>Reset Countdown</value>
+    <value>Countdown zurücksetzen</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Speichern</value>
   </data>
   <data name="ShowHideCountdowns" xml:space="preserve">
-    <value>Show/Hide expired or stopped Countdowns</value>
+    <value>Zeige/Verstecke inaktive oder gestoppte Countdowns</value>
   </data>
   <data name="StartStopCountdown" xml:space="preserve">
-    <value>Start/Stop Countdown</value>
+    <value>Starte/Stoppe Countdown</value>
   </data>
   <data name="Thanks" xml:space="preserve">
-    <value>Many thanks for your great work!</value>
+    <value>Vielen Dank für die großartige Arbeit!</value>
   </data>
   <data name="ThirdParty" xml:space="preserve">
-    <value>3rd Party Content used in this Software:</value>
+    <value>Externe Inhalte, die in diesem Programm benutzt wurden:</value>
   </data>
 </root>

@@ -1,7 +1,9 @@
 ﻿<Window x:Class="TerribleFate.AboutBox"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize"
-        Title="AboutBox" Height="300" Width="300">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:p="clr-namespace:TerribleFate.Properties"
+        WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize"
+        Title="About" Height="300" Width="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -24,11 +26,11 @@
             </StackPanel>
         </Grid>
         <StackPanel Grid.Row="1">
-            <TextBlock Text="3rd Party Content used in this Software:" />
+            <TextBlock Text="{x:Static p:Resources.ThirdParty }" />
             <StackPanel Margin="5">
                 <StackPanel>
                     <TextBlock Text="Fugue Icons" />
-                    <TextBlock Text="by Yusuke Kamiyamane " />
+                    <TextBlock Text="Yusuke Kamiyamane " />
                     <TextBlock>
                         <Hyperlink Click="Hyperlink_Click_1">
                             <TextBlock Text="http://p.yusukekamiyamane.com/" />
@@ -37,7 +39,7 @@
                 </StackPanel>
                     
             </StackPanel>
-            <TextBlock Text="Many thanks for your great work!" />
+            <TextBlock Text="{x:Static p:Resources.Thanks }" />
         </StackPanel>
     </Grid>
 </Window>

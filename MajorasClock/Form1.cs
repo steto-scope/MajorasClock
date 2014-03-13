@@ -38,6 +38,7 @@ namespace MajorasClock
 
         public Form1()
         {
+
             currentWallpaper = ReadWallpaperSettings();
             if(currentWallpaper!=null && currentWallpaper.Item2!= WallpaperType.Color)
             {
@@ -64,11 +65,20 @@ namespace MajorasClock
             iss = new ImageBrush(bi);
             cc.MouseMove += u_MouseMove;
             cc.MouseUp += u_MouseUp;
-            cc.SizeChanged+=cc_SizeChanged;
+            cc.SizeChanged += ViewModel_SizeChanged;
             this.Move += Form1_Move;
 
+            elementHost1.AutoSize = true;
             
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+             this.AutoSize = true;
+             
             DockStart();
+        }
+
+        void ViewModel_SizeChanged(object sender, EventArgs e)
+        {
+            Form1_Move(null, null);
         }
 
 
@@ -76,11 +86,7 @@ namespace MajorasClock
 
         void cc_SizeChanged(object sender, EventArgs e)
         {
-            if (!(double.IsNaN(cc.ActualWidth) && double.IsNaN(cc.ActualHeight)))
-            {
-                Width = (int)cc.ActualWidth;
-                Height = (int)cc.ActualHeight;
-            }
+            
         }
 
         void ViewModel_CloseRequest(object sender, EventArgs e)

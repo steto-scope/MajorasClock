@@ -28,7 +28,13 @@ namespace TerribleFate
         public bool ShowInactive
         {
             get { return Get<bool>("ShowInactive"); }
-            set { Set("ShowInactive", value); OnPropertyChanged("Countdowns"); }
+            set
+            {
+                Set("ShowInactive", value); 
+                OnPropertyChanged("Countdowns");
+                if (SizeChanged != null)
+                    SizeChanged(null, null);
+            }
         }
 
         public bool IsMouseOver
@@ -37,7 +43,8 @@ namespace TerribleFate
             set { Set("IsMouseOver", value);  }
         }
 
-       
+
+        public event EventHandler SizeChanged;
 
         public MainViewModel()
         {
@@ -69,6 +76,8 @@ namespace TerribleFate
         void Countdowns_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged("Countdowns");
+            if (SizeChanged != null)
+                SizeChanged(null, null);
         }
 
         public IEnumerable<Countdown> SortedCountdownsWithInactive
@@ -207,17 +216,40 @@ namespace TerribleFate
             return true;
         }
 
+        private ICommand cmdStopAllSounds;
+
+        public RelayCommand StopAllSoundsCommand
+        {
+            get
+            {
+                if (cmdStopAllSounds == null)
+                    cmdStopAllSounds = new RelayCommand(p => StopAllSounds(p), p => CanStopAllSounds(p));
+                return (RelayCommand)cmdStopAllSounds;
+            }
+        }
+
+        public void StopAllSounds(object param)
+        {
+            SortedCountdownsWithInactive.ToList().ForEach(a => a.StopSound());
+        }
+
+        public bool CanStopAllSounds(object param)
+        {
+            return true;
+        }
+
+
 
         public void Save()
         {
             try
             {
                 XmlSerializer s = new XmlSerializer(typeof(ObservableCollection<Countdown>), new Type[] { typeof(CountdownSettings) });
-                if (!Directory.Exists(App.ConfigSaveFilePath))
-                    Directory.CreateDirectory(App.ConfigSaveFilePath);
+                if (!Directory.Exists(AppSettings.ConfigSaveFilePath))
+                    Directory.CreateDirectory(AppSettings.ConfigSaveFilePath);
 
-                File.Delete(App.ConfigSaveFilePath);
-                Stream f = File.OpenWrite(App.CountdownSaveFile);
+                File.Delete(AppSettings.CountdownSaveFile);
+                Stream f = File.OpenWrite(AppSettings.CountdownSaveFile);
                 s.Serialize(f, CountdownCollection);
                 f.Close();
             }
@@ -226,10 +258,10 @@ namespace TerribleFate
             try
             {
                 XmlSerializer s = new XmlSerializer(typeof(AppSettings));
-                if (!Directory.Exists(App.ConfigSaveFilePath))
-                    Directory.CreateDirectory(App.ConfigSaveFilePath);
-                File.Delete(App.ConfigSaveFile);
-                Stream f = File.OpenWrite(App.ConfigSaveFile);
+                if (!Directory.Exists(AppSettings.ConfigSaveFilePath))
+                    Directory.CreateDirectory(AppSettings.ConfigSaveFilePath);
+                File.Delete(AppSettings.ConfigSaveFile);
+                Stream f = File.OpenWrite(AppSettings.ConfigSaveFile);
                 s.Serialize(f, Config);
                 f.Close();
             }
@@ -240,9 +272,9 @@ namespace TerribleFate
         {
             try
             {
-                if (File.Exists(App.ConfigSaveFile))
+                if (File.Exists(AppSettings.ConfigSaveFile))
                 {
-                    using (Stream f = File.OpenRead(App.ConfigSaveFile))
+                    using (Stream f = File.OpenRead(AppSettings.ConfigSaveFile))
                     {
                         XmlSerializer s = new XmlSerializer(typeof(AppSettings));
                         var col = (AppSettings)s.Deserialize(f);
@@ -255,9 +287,9 @@ namespace TerribleFate
             catch { }
             try
             {
-                if (File.Exists(App.CountdownSaveFile))
+                if (File.Exists(AppSettings.CountdownSaveFile))
                 {
-                    using(Stream f = File.OpenRead(App.CountdownSaveFile))
+                    using (Stream f = File.OpenRead(AppSettings.CountdownSaveFile))
                     {
                         XmlSerializer s = new XmlSerializer(typeof(ObservableCollection<Countdown>), new Type[] { typeof(CountdownSettings) });
                         var col = (ObservableCollection<Countdown>)s.Deserialize(f);

@@ -12,7 +12,19 @@ namespace TerribleFate
     [XmlInclude(typeof(MatrixTransform))]
     public class AppSettings : BaseObject
     {
-        
+
+        static AppSettings()
+        {
+            ConfigSaveFilePath = Environment.GetEnvironmentVariable("LocalAppData")+"\\MajorasClock";
+            CountdownSaveFile = ConfigSaveFilePath+"\\countdowns.xml";
+            ConfigSaveFile = ConfigSaveFilePath+ "\\config.xml";                
+        }
+
+        public static string CountdownSaveFile { get; private set; }
+        public static string ConfigSaveFile { get; private set; }
+
+        public static string ConfigSaveFilePath { get; private set; }
+
         public Brush TextBrush
         {
             get { return Get<Brush>("TextBrush"); }

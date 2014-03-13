@@ -54,7 +54,6 @@ namespace TerribleFate
             ofd.CustomPlaces = new List<FileDialogCustomPlace>()
             {
                 new FileDialogCustomPlace(@"C:\Windows\Media\"),
-                new FileDialogCustomPlace(AppDomain.CurrentDomain.BaseDirectory+"sounds\\"),
                 new FileDialogCustomPlace(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic))
             };
             ofd.Filter = "Audio-Files|*.wav";
@@ -63,6 +62,7 @@ namespace TerribleFate
             if(result.HasValue && result.Value)
             {
                 ((CountdownSettings)DataContext).SoundToPlay = ofd.FileName;
+                ((CountdownSettings)DataContext).NotifyBySound = true;
             }
         }
 

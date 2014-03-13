@@ -14,8 +14,8 @@ namespace TerribleFate
         {
             Name = "Unbenannt";
             NotifyByOverlay = true;
-            NotifyBySound = true;
-            SoundToPlay = AppDomain.CurrentDomain.BaseDirectory+ "sounds\\cuckoo.wav";
+            //NotifyBySound = true;
+            //SoundToPlay = AppDomain.CurrentDomain.BaseDirectory+ "sounds\\cuckoo.wav";
             NotifyBefore = new TimeSpan(0, 5, 0);
             UseDuration = true;
         }
