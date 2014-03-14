@@ -1,0 +1,12 @@
+﻿<Window x:Class="notifier.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Topmost="True"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" MouseDown="Window_MouseDown" SizeToContent="WidthAndHeight" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" WindowStyle="None" Background="#AA000000" AllowsTransparency="True"
+        Title="MainWindow" >
+    <Grid>
+        <TextBlock Name="t" FontSize="32" Foreground="White" HorizontalAlignment="Center" Margin="20">
+            <TextBlock.BitmapEffect>
+                <OuterGlowBitmapEffect GlowColor="Black" GlowSize="6" />
+            </TextBlock.BitmapEffect>
+        </TextBlock>
+    </Grid>
+</Window>

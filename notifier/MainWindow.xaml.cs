@@ -10,19 +10,30 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
-namespace TerribleFate
+namespace notifier
 {
     /// <summary>
-    /// Interaktionslogik für Overlay.xaml
+    /// Interaktionslogik für MainWindow.xaml
     /// </summary>
-    public partial class Overlay : Window
+    public partial class MainWindow : Window
     {
-        public Overlay(Countdown d)
+        DispatcherTimer dt = new DispatcherTimer();
+        public MainWindow()
         {
             InitializeComponent();
-            DataContext = d;
+            t.Text = App.Text;
+            dt.Interval = TimeSpan.FromSeconds(App.Timeout);
+            dt.Tick += dt_Tick;
+            dt.Start();
+        }
+
+        void dt_Tick(object sender, EventArgs e)
+        {
+            Close();
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)

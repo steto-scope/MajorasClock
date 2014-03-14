@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerribleFate", "TerribleFat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MajorasClock", "MajorasClock\MajorasClock.csproj", "{7BA6CCC5-969F-49FD-AA87-20D7D3160049}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "notifier", "notifier\notifier.csproj", "{EF777A5B-1B2D-4A01-9A6B-695143E68B03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7BA6CCC5-969F-49FD-AA87-20D7D3160049}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BA6CCC5-969F-49FD-AA87-20D7D3160049}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BA6CCC5-969F-49FD-AA87-20D7D3160049}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF777A5B-1B2D-4A01-9A6B-695143E68B03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF777A5B-1B2D-4A01-9A6B-695143E68B03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF777A5B-1B2D-4A01-9A6B-695143E68B03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF777A5B-1B2D-4A01-9A6B-695143E68B03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

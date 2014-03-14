@@ -299,7 +299,7 @@ namespace TerribleFate
                         }
 
                         foreach (var c in CountdownCollection)
-                            if (c.RunningSerialized)
+                            if (c.RunAfterDeserialize)
                                 c.Start();
 
                         f.Close();

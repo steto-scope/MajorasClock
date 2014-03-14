@@ -84,7 +84,7 @@ namespace TerribleFate
                     t = Task.Run(() => CountDuration(ct.Token), ct.Token).ContinueWith(r => Notify(), scheduler);
                 else
                     t = Task.Run(() => CountDate(ct.Token), ct.Token).ContinueWith(r => Notify(), scheduler);
-
+                runningserialized = false;
             }
         }
 
@@ -169,6 +169,12 @@ namespace TerribleFate
         }
 
         [XmlIgnore]
+        public bool RunAfterDeserialize
+        {
+            get { return runningserialized; }
+        }
+
+        [XmlIgnore]
         public bool NotRunning
         {
             get { return !Get<bool>("Running"); }
@@ -209,8 +215,9 @@ namespace TerribleFate
 
             if(Settings.NotifyByOverlay)
             {
-                Overlay o = new TerribleFate.Overlay(this);
-                o.Show();
+                Process.Start("notifier.exe", "-message \""+this.Settings.Name+"\"");
+                //Overlay o = new TerribleFate.Overlay(this);
+                //o.Show();
             }
         }
 
