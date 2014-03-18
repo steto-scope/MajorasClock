@@ -6,6 +6,7 @@ Source: D:\vs\TerribleFate\MajorasClock\bin\Release\Xceed.Wpf.Toolkit.dll; DestD
 Source: D:\vs\TerribleFate\MajorasClock\bin\Release\de\TerribleFate.resources.dll; DestDir: {app}\de\; 
 Source: D:\vs\TerribleFate\MajorasClock\bin\Release\en\TerribleFate.resources.dll; DestDir: {app}\en\; 
 Source: D:\vs\TerribleFate\MajorasClock\bin\Release\clock.ico; DestDir: {app}; 
+Source: D:\vs\TerribleFate\MajorasClock\bin\Release\notifier.exe; DestDir: {app}; 
 
 [Dirs]
 Name: {app}\de;
@@ -29,7 +30,6 @@ UninstallDisplayName=Majora´s Clock
 AppVersion=1.0
 UninstallLogMode=new
 AppPublisher=Recursivebytes
-ArchitecturesAllowed=x64
 
 [Components]
 Name: StartwithSystem; Description: "Add to Autostart"; 

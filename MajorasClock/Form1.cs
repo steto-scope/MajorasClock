@@ -28,6 +28,22 @@ namespace MajorasClock
         [DllImport("user32.dll", SetLastError = false)]
         static extern IntPtr GetDesktopWindow();
 
+        /*
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        */
+
+        [DllImport("user32.dll")]
+        static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
+
+        public const int GWL_EXSTYLE = -20;
+        public const int WS_EX_LAYERED = 0x80000;
+        public const int LWA_ALPHA = 0x2;
+        public const int LWA_COLORKEY = 0x1;
+
 
 
 
@@ -58,8 +74,8 @@ namespace MajorasClock
             cc.ViewModel.CloseRequest += ViewModel_CloseRequest;
             elementHost1.Child = cc;
 
-            ShowInTaskbar = false;
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            //ShowInTaskbar = false;
+            //FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             //FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
            
             iss = new ImageBrush(bi);
@@ -72,8 +88,12 @@ namespace MajorasClock
             
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
              this.AutoSize = true;
+
+             //int initialStyle = GetWindowLong(this.Handle, -20);
+            // SetWindowLong(this.Handle, -20, initialStyle | 0x80000 | 0x20);
              
             DockStart();
+            //SetLayeredWindowAttributes(Handle, 0, 128, LWA_COLORKEY);
         }
 
         void ViewModel_SizeChanged(object sender, EventArgs e)
@@ -202,7 +222,7 @@ namespace MajorasClock
                 pWnd = FindWindowEx(target, IntPtr.Zero, "SysListView32", null);
             }
             IntPtr tWnd = this.Handle;
-            SetParent(tWnd, pWnd);
+            //SetParent(tWnd, pWnd);
 
         }
 
@@ -211,7 +231,8 @@ namespace MajorasClock
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= 0x80;
+                cp.ExStyle |= 0x80 | 0x80000/* 0x20*/ ;
+                
                 return cp;
             }
         }
