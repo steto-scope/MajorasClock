@@ -19,6 +19,20 @@ namespace TerribleFate
             set { Set("Countdowns",value); }
         }
 
+
+        public bool Locked
+        {
+            get { return Get<bool>("Locked"); }
+            set
+            {
+                Set("Locked", value);
+                Config.LockedSerialized = value;
+                Config.UpdateHeaderColor(value); 
+                if (SizeChanged != null)
+                    SizeChanged(null, null);
+            }
+        }
+
         public AppSettings Config
         {
             get { return Get<AppSettings>("Config"); }
@@ -279,6 +293,7 @@ namespace TerribleFate
                         XmlSerializer s = new XmlSerializer(typeof(AppSettings));
                         var col = (AppSettings)s.Deserialize(f);
                         Config = col;
+                        Locked = Config.LockedSerialized;
 
                         f.Close();
                     }

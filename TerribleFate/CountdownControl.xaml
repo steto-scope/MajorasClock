@@ -11,7 +11,7 @@
         <Grid.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="{x:Static p:Resources.Info}" Command="{Binding InfoCommand}" />
-                <MenuItem Header="{x:Static p:Resources.Lock}" IsCheckable="True" IsChecked="{Binding Config.Locked}" />
+                <MenuItem Header="{x:Static p:Resources.Lock}" IsCheckable="True" IsChecked="{Binding Locked}" />
                 <Separator />
                 <MenuItem Header="{x:Static p:Resources.Exit}" Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=window}" >
                     <MenuItem.Icon>
@@ -165,25 +165,25 @@
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Visibility="{Binding IsMouseOver, Converter={StaticResource pb2v}, ConverterParameter=true}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="160" />
+                <ColumnDefinition Width="160" />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <Image Source="logo.png" Width="24" />
             </StackPanel>
-            <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <Button Content="Mute" ToolTip="{x:Static p:Resources.MuteAll}" Command="{Binding StopAllSoundsCommand}" Style="{StaticResource MuteStyle}"></Button>
-                <ToggleButton Content="Lock" ToolTip="{x:Static p:Resources.Lock}" IsChecked="{Binding Config.Locked}" Style="{StaticResource LockStyle}" />
-                <ToggleButton Content="Show" ToolTip="{x:Static p:Resources.ShowHideCountdowns}" IsChecked="{Binding ShowInactive, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" Style="{StaticResource InactiveStyle}"></ToggleButton>
-                <Button Content="Neu" ToolTip="{x:Static p:Resources.AddCountdown}" Command="{Binding NewCountdownCommand}" Style="{StaticResource NewStyle}"></Button>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Mute" ToolTip="{x:Static p:Resources.MuteAll}" ToolTipService.VerticalOffset="-62"  Command="{Binding StopAllSoundsCommand}" Style="{StaticResource MuteStyle}"></Button>
+                <ToggleButton Content="Lock" ToolTip="{x:Static p:Resources.Lock}"  ToolTipService.VerticalOffset="-62" IsChecked="{Binding Locked}" Style="{StaticResource LockStyle}" />
+                <ToggleButton Content="Show" ToolTipService.VerticalOffset="-62" ToolTip="{x:Static p:Resources.ShowHideCountdowns}" IsChecked="{Binding ShowInactive, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" Style="{StaticResource InactiveStyle}"></ToggleButton>
+                <Button Content="Neu" ToolTipService.VerticalOffset="-62" ToolTip="{x:Static p:Resources.AddCountdown}" Command="{Binding NewCountdownCommand}" Style="{StaticResource NewStyle}"></Button>
             </StackPanel>
         </Grid>
-        <ListView ItemsSource="{Binding Countdowns}" Grid.Row="1" Background="Transparent" BorderThickness="0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+        <ListView ItemsSource="{Binding Countdowns}" Grid.Row="1" Background="Transparent" BorderThickness="0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="320">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

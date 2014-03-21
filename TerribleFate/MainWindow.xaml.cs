@@ -52,7 +52,7 @@ namespace TerribleFate
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
             MainViewModel mw = DataContext as MainViewModel;
-            if(e.LeftButton == MouseButtonState.Pressed && mw!=null && !mw.Config.Locked)
+            if(e.LeftButton == MouseButtonState.Pressed && mw!=null && !mw.Locked)
                 DragMove();
         }
 

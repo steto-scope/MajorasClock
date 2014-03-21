@@ -50,22 +50,30 @@ namespace TerribleFate
             Top = 0;
         }
 
-        public bool Locked
+        public void UpdateHeaderColor(bool value)
         {
-            get { return Get<bool>("Locked"); }
-            set { Set("Locked", value); OnPropertyChanged("HeaderColor"); }
+            useLockedColor = value;
+            OnPropertyChanged("HeaderColor");
         }
 
-        private static SolidColorBrush unlockedheader = new SolidColorBrush(Color.FromArgb(20, 255, 255, 255));
+        private bool useLockedColor;
+        private static SolidColorBrush unlockedheader = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
         private static SolidColorBrush lockedheader = new SolidColorBrush(Colors.Transparent);
         public Brush HeaderColor
         {
             get
             {
-                if (Locked)
+                if (useLockedColor)
                     return lockedheader;
                 return unlockedheader;
             }
+            set
+            {
+                OnPropertyChanged("HeaderColor");
+            }
         }
+
+        [XmlElement("Locked")]
+        public bool LockedSerialized { get; set; }
     }
 }

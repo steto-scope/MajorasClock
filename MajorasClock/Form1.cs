@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media;
@@ -50,44 +51,40 @@ namespace MajorasClock
         CountdownControl cc;
         System.Windows.Media.Imaging.BitmapImage bi;
         Rectangle resolution = Screen.PrimaryScreen.Bounds;
-        Tuple<object, WallpaperType> currentWallpaper;
+
+        System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
 
         public Form1()
         {
 
-            currentWallpaper = ReadWallpaperSettings();
-            if(currentWallpaper!=null && currentWallpaper.Item2!= WallpaperType.Color)
-            {
-                bi = new System.Windows.Media.Imaging.BitmapImage();
-                bi.BeginInit();
-                bi.UriSource = new Uri((string)currentWallpaper.Item1, UriKind.RelativeOrAbsolute);
-                bi.EndInit();
-            }
             
             cc = new CountdownControl();
             Point p = new Point((int)cc.ViewModel.Config.Left, (int)cc.ViewModel.Config.Top);
             StartPosition = FormStartPosition.Manual;
             Location = p;
             InitializeComponent();
-            
+            BackgroundImageLayout = ImageLayout.Stretch;
 
             cc.ViewModel.CloseRequest += ViewModel_CloseRequest;
             elementHost1.Child = cc;
 
             //ShowInTaskbar = false;
-            //FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             //FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+            t.Tick += t_Tick;
+            t.Interval = 80;
            
             iss = new ImageBrush(bi);
             cc.MouseMove += u_MouseMove;
             cc.MouseUp += u_MouseUp;
-            cc.SizeChanged += ViewModel_SizeChanged;
-            this.Move += Form1_Move;
+            cc.PreviewMouseDown += cc_MouseDown;
+            cc.ViewModel.SizeChanged += ViewModel_SizeChanged;
 
             elementHost1.AutoSize = true;
             
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
              this.AutoSize = true;
+            
 
              //int initialStyle = GetWindowLong(this.Handle, -20);
             // SetWindowLong(this.Handle, -20, initialStyle | 0x80000 | 0x20);
@@ -98,16 +95,49 @@ namespace MajorasClock
 
         void ViewModel_SizeChanged(object sender, EventArgs e)
         {
-            Form1_Move(null, null);
+            t.Start();
+        }
+
+        void cc_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            /*if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
+                if (!MouseIsDown)
+                {
+                    MouseIsDown = true;
+                }
+            }*/
+        }
+
+        void t_Tick(object sender, EventArgs e)
+        {
+           UpdateBackground();
+           t.Stop();
         }
 
 
-
-
-        void cc_SizeChanged(object sender, EventArgs e)
+        private void UpdateBackground()
         {
+            //if (!cc.ViewModel.Config.Locked)
+            //{
+            //    var c1 = WindowHelper.GetPixelColor(Location.X,Location.Y);
+            //    var c2=WindowHelper.GetPixelColor(Location.X+Width-1,Location.Y+Height-1);
+            //    if( c1 == System.Drawing.Color.Black && c2 == System.Drawing.Color.Black)
+            //    {
+                    Bitmap bgbitmap = Screenshot();
+                    var bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(bgbitmap.GetHbitmap(),
+                                                                 IntPtr.Zero,
+                                                                 System.Windows.Int32Rect.Empty,
+                                                                 System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions()
+                );
+                    iss = new ImageBrush(bitmapSource);
+                    cc.Background = iss;
+              //  }
+            //}
             
         }
+
+
 
         void ViewModel_CloseRequest(object sender, EventArgs e)
         {
@@ -126,13 +156,16 @@ namespace MajorasClock
 
         void u_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+           //if(MouseIsDown)
+           //     t.Start(); 
             MouseIsDown = false;
+            //BackgroundImageLayout = ImageLayout.Stretch;
         }
 
         void u_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             var p = e.GetPosition(cc);
-            if(!cc.ViewModel.Config.Locked)
+            if(!cc.ViewModel.Locked)
                 Form1_MouseMove(sender, new MouseEventArgs(e.LeftButton == System.Windows.Input.MouseButtonState.Pressed ? MouseButtons.Left : MouseButtons.None, 0, (int)p.X, (int)p.Y, 0));
         }
 
@@ -141,45 +174,6 @@ namespace MajorasClock
             DockStop();
         }
 
-
-        public Tuple<object, WallpaperType> ReadWallpaperSettings()
-        {
-
-            RegistryKey k = Registry.CurrentUser;
-            if (k != null)
-            {
-                RegistryKey desktop = k.OpenSubKey("Control Panel\\Desktop");
-                if (desktop != null)
-                {
-                    string wallpaper = (string)desktop.GetValue("Wallpaper");
-                    if(string.IsNullOrEmpty(wallpaper))
-                    {
-                        RegistryKey color = k.OpenSubKey("Control Panel\\Colors");
-                        string[] c = ((string)color.GetValue("Background")).Split(' ');
-                        var z = System.Windows.Media.Color.FromRgb(byte.Parse(c[0]) , byte.Parse(c[1]),byte.Parse(c[2]));
-                        return new Tuple<object, WallpaperType>(z, WallpaperType.Color);
-                    }
-                    int style = int.Parse(desktop.GetValue("WallpaperStyle").ToString());
-                    int tile = int.Parse(desktop.GetValue("TileWallpaper").ToString());
-                    WallpaperType type = WallpaperType.Unknown;
-
-                    if (tile == 0 && style == 10)
-                        type = WallpaperType.Fill;
-                    if (tile == 0 && style == 6)
-                        type = WallpaperType.Uniform;
-                    if (tile == 0 && style == 2)
-                        type = WallpaperType.UniformToFill;
-                    if (tile == 1)
-                        type = WallpaperType.Tiled;
-
-                    if (type == WallpaperType.Unknown || string.IsNullOrEmpty(wallpaper))
-                        return null;
-
-                    return new Tuple<object, WallpaperType>(wallpaper, type);
-                }
-            }
-            return null;
-        }
 
         bool MouseIsDown = false;
         Point MouseLoc = new Point();
@@ -197,17 +191,13 @@ namespace MajorasClock
             }
         }
 
-        private void Form1_MouseUp(object sender, MouseEventArgs e)
-        {
-            MouseIsDown = false;
-        }
 
         
         public void DockStart()
         {
             IntPtr pWnd = FindWindow("ProgMan", null);
-            pWnd = FindWindowEx(pWnd, IntPtr.Zero, "SHELLDLL_DefView", null);
-            pWnd = FindWindowEx(pWnd, IntPtr.Zero, "SysListView32", null);
+            //pWnd = FindWindowEx(pWnd, IntPtr.Zero, "SHELLDLL_DefView", null);
+            //pWnd = FindWindowEx(pWnd, IntPtr.Zero, "SysListView32", null);
 
             if(pWnd==IntPtr.Zero) //Win7 desktop rotation causes SysListView32 to be child of a WorkerW-instance instead of ProgMan
             {
@@ -219,72 +209,51 @@ namespace MajorasClock
                     target = FindWindowEx(pWnd, IntPtr.Zero, "SHELLDLL_DefView", null);
                 } while (target == IntPtr.Zero && pWnd != IntPtr.Zero);
 
-                pWnd = FindWindowEx(target, IntPtr.Zero, "SysListView32", null);
+                //pWnd = FindWindowEx(pWnd, IntPtr.Zero, "SysListView32", null);
             }
             IntPtr tWnd = this.Handle;
-            //SetParent(tWnd, pWnd);
+            SetParent(tWnd, pWnd);
 
         }
 
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams cp = base.CreateParams;
-                cp.ExStyle |= 0x80 | 0x80000/* 0x20*/ ;
-                
-                return cp;
-            }
-        }
         ImageBrush iss;
-        void Form1_Move(object sender, EventArgs e)
-        {
-            if (currentWallpaper == null)
-                return;
-
-            if(currentWallpaper.Item2 == WallpaperType.Color)
-            {
-                SolidColorBrush scb = new SolidColorBrush((System.Windows.Media.Color)currentWallpaper.Item1);
-                cc.Background = scb;
-                elementHost1.Child = cc;
-            }
-
-            if(currentWallpaper.Item2 == WallpaperType.Fill)
-            {
-                System.Windows.Rect t = new System.Windows.Rect((double)Location.X / (double)resolution.Width, (double)Location.Y / (double)resolution.Height, (double)Width / (double)resolution.Width, (double)Height / (double)resolution.Height);
-                iss.Viewbox = t;
-                cc.Background = iss;
-                elementHost1.Child = cc;
-               
-            }
-
-            if(currentWallpaper.Item2 == WallpaperType.Tiled)
-            {
-                ImageBrush iss = new ImageBrush(bi);
-                iss.TileMode = TileMode.Tile;
-
-                double xfac = 1 / (bi.Width / resolution.Width);
-                double yfac = 1 / (bi.Height / resolution.Height);
-                double xxfac = (double)bi.Width / (double)Width;
-                double yyfac = (double)bi.Height / (double)Height;
-
-                iss.Viewport = new System.Windows.Rect(((double)Location.X / (double)resolution.Width) * -xfac * xxfac, ((double)Location.Y / (double)resolution.Height) * -yfac * yyfac, xxfac, yyfac);
-                cc.Background = iss;
-                elementHost1.Child = cc;
-              
-            }
-        }
+        
         public void DockStop()
         {
             IntPtr hwndParent = FindWindow("screenClass", null);
             SetParent(ParentForm.Handle, hwndParent);
         }
 
-        private void Form1_Shown(object sender, EventArgs e)
+
+         
+        Bitmap Screenshot()
         {
-            Form1_Move(null, null);
+
+            Bitmap bmpScreenCapture = new Bitmap(Size.Width, Size.Height);
+
+            {
+                using (Graphics g = Graphics.FromImage(bmpScreenCapture))
+                {
+                    Visible = false;
+                    g.CopyFromScreen(Location.X,
+                                     Location.Y,
+                                     0, 0,
+                                     Size,
+                                     CopyPixelOperation.SourceCopy);
+                    Visible = true;
+                }
+            }
+
+
+
+            return bmpScreenCapture;
         }
 
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            if (cc.ViewModel.Locked)
+                UpdateBackground();
+        }
     }
 
     public enum WallpaperType
