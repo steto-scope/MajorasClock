@@ -28,8 +28,9 @@ namespace TerribleFate
                 Set("Locked", value);
                 Config.LockedSerialized = value;
                 Config.UpdateHeaderColor(value); 
-                if (SizeChanged != null)
-                    SizeChanged(null, null);
+                if(value)
+                    if (SizeChanged != null)
+                        SizeChanged(null, null);
             }
         }
 

@@ -28,6 +28,8 @@ namespace MajorasClock
         public static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
         [DllImport("user32.dll", SetLastError = false)]
         static extern IntPtr GetDesktopWindow();
+        [DllImport("user32.dll")]
+        static extern IntPtr GetShellWindow();
 
         /*
         [DllImport("user32.dll", SetLastError = true)]
@@ -118,23 +120,15 @@ namespace MajorasClock
 
         private void UpdateBackground()
         {
-            //if (!cc.ViewModel.Config.Locked)
-            //{
-            //    var c1 = WindowHelper.GetPixelColor(Location.X,Location.Y);
-            //    var c2=WindowHelper.GetPixelColor(Location.X+Width-1,Location.Y+Height-1);
-            //    if( c1 == System.Drawing.Color.Black && c2 == System.Drawing.Color.Black)
-            //    {
-                    Bitmap bgbitmap = Screenshot();
-                    var bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(bgbitmap.GetHbitmap(),
+
+            Bitmap i = Screenshot();
+            var bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(i.GetHbitmap(),
                                                                  IntPtr.Zero,
                                                                  System.Windows.Int32Rect.Empty,
                                                                  System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions()
                 );
-                    iss = new ImageBrush(bitmapSource);
-                    cc.Background = iss;
-              //  }
-            //}
-            
+            iss = new ImageBrush(bitmapSource);
+            cc.Background = iss;
         }
 
 
@@ -229,18 +223,20 @@ namespace MajorasClock
         Bitmap Screenshot()
         {
 
+            
+
             Bitmap bmpScreenCapture = new Bitmap(Size.Width, Size.Height);
 
             {
                 using (Graphics g = Graphics.FromImage(bmpScreenCapture))
                 {
+                    ScreenCapture sc = new ScreenCapture();
                     Visible = false;
-                    g.CopyFromScreen(Location.X,
-                                     Location.Y,
-                                     0, 0,
-                                     Size,
-                                     CopyPixelOperation.SourceCopy);
+                    Bitmap i = (Bitmap)sc.CaptureWindow(GetShellWindow());
                     Visible = true;
+                    g.DrawImage(i,0,0, new Rectangle(Location.X, Location.Y,Size.Width, Size.Height), GraphicsUnit.Pixel);
+                    
+                    
                 }
             }
 
