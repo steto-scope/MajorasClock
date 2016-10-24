@@ -17,7 +17,7 @@
             <Image Grid.Column="0" VerticalAlignment="Center" Width="80" Source="logo.png" />
             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock FontSize="24" Text="Majora´s Clock"  />
-                <TextBlock Text="Version 1.0" />
+                <TextBlock Text="Version 1.0-beta1" />
                 <TextBlock>
                     <Hyperlink Click="Hyperlink_Click">
                         <TextBlock Text="http://terriblefate.codeplex.com" />
@@ -29,11 +29,11 @@
             <TextBlock Text="{x:Static p:Resources.ThirdParty }" />
             <StackPanel Margin="5">
                 <StackPanel>
-                    <TextBlock Text="Fugue Icons" />
-                    <TextBlock Text="Yusuke Kamiyamane " />
+                    <TextBlock Text="Modern UI Icons" />
+                    <TextBlock Text="templarian" />
                     <TextBlock>
                         <Hyperlink Click="Hyperlink_Click_1">
-                            <TextBlock Text="http://p.yusukekamiyamane.com/" />
+                            <TextBlock Text="http://modernuiicons.com/" />
                         </Hyperlink>
                      </TextBlock>
                 </StackPanel>

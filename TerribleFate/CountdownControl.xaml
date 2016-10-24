@@ -14,9 +14,7 @@
                 <MenuItem Header="{x:Static p:Resources.Lock}" IsCheckable="True" IsChecked="{Binding Locked}" />
                 <Separator />
                 <MenuItem Header="{x:Static p:Resources.Exit}" Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=window}" >
-                    <MenuItem.Icon>
-                        <Image Source="eject.png" Width="16" />
-                    </MenuItem.Icon>
+                 
                 </MenuItem>
             </ContextMenu>
         </Grid.ContextMenu>
@@ -24,52 +22,43 @@
             <BooleanToVisibilityConverter x:Key="b2v" />
             <local:ParametrizedBooleanToVisibilityConverter x:Key="pb2v" />
             <local:TimeSpanToStringConverter x:Key="tsts" />
-            <Style x:Key="ActionsStyle" TargetType="ToggleButton">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate>
-                            <StackPanel>
-                                <Image Name="img" Source="noactions.png" Width="16"/>
-                            </StackPanel>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="ToggleButton.IsChecked" Value="True">
-                                    <Setter TargetName="img" Property="Source" Value="actions.png"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+            <LinearGradientBrush x:Key="DefaultButtonGradient">
+                <GradientStop Color="#FF888888" Offset="0" />
+                <GradientStop Color="White" Offset="1" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="RedButtonGradient">
+                <GradientStop Color="#FFFF8888" Offset="0" />
+                <GradientStop Color="#FFFF0000" Offset="1" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="ActivatedButtonGradient">
+                <GradientStop Color="#FFFFa588" Offset="0" />
+                <GradientStop Color="#FFFFa500" Offset="1" />
+            </LinearGradientBrush>
+            <DropShadowEffect x:Key="HoverShadowEffect" Color="Cyan" BlurRadius="5" ShadowDepth="0" />
+
             <Style x:Key="LockStyle" TargetType="ToggleButton">
+                <Setter Property="Width" Value="18" />
+                <Setter Property="Height" Value="18" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <StackPanel>
-                                <Image Name="img" Source="unlock.png" Width="24">
-                                    <Image.BitmapEffect>
-                                        <OuterGlowBitmapEffect GlowColor="White" GlowSize="5"  Opacity="0.4"/>
-                                    </Image.BitmapEffect>
-                                </Image>
-                            </StackPanel>
+                            <Grid>
+                                <Rectangle Name="img" Fill="{StaticResource DefaultButtonGradient}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="Icons/appbar.lock.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Grid>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="ToggleButton.IsChecked" Value="True">
-                                    <Setter TargetName="img" Property="Source" Value="lock.png"/>
+                                    <Setter TargetName="img" Property="OpacityMask">
+                                        <Setter.Value>
+                                            <ImageBrush ImageSource="Icons/appbar.unlock.keyhole.png"/>
+                                        </Setter.Value>
+                                    </Setter>
                                 </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style x:Key="NotificationsStyle" TargetType="ToggleButton">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate>
-                            <StackPanel>
-                                <Image Name="img" Source="nonotify.png" Width="16"/>
-                            </StackPanel>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="ToggleButton.IsChecked" Value="True">
-                                    <Setter TargetName="img" Property="Source" Value="notify.png"/>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Effect" TargetName="img" Value="{StaticResource HoverShadowEffect}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -77,15 +66,124 @@
                 </Setter>
             </Style>
             <Style x:Key="InactiveStyle" TargetType="ToggleButton">
+                <Setter Property="Width" Value="20" />
+                <Setter Property="Height" Value="20" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <StackPanel>
-                                <Image Name="img" Source="showinactive.png" Width="24"/>
-                            </StackPanel>
+                            <Grid>
+                                <Rectangle Name="img" Fill="{StaticResource DefaultButtonGradient}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="Icons/appbar.magnify.add.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Grid>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="ToggleButton.IsChecked" Value="True">
-                                    <Setter TargetName="img" Property="Source" Value="hideinactive.png"/>
+                                    <Setter TargetName="img" Property="OpacityMask">
+                                        <Setter.Value>
+                                            <ImageBrush ImageSource="Icons/appbar.magnify.minus.png"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Effect" TargetName="img" Value="{StaticResource HoverShadowEffect}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="NewStyle" TargetType="Button">
+                <Setter Property="Width" Value="18" />
+                <Setter Property="Height" Value="18" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Grid>
+                                <Rectangle Name="img" Fill="{StaticResource DefaultButtonGradient}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="Icons/appbar.add.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Effect" TargetName="img" Value="{StaticResource HoverShadowEffect}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="MuteStyle" TargetType="Button">
+                <Setter Property="Width" Value="20" />
+                <Setter Property="Height" Value="20" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Grid>
+                                <Rectangle Name="img" Fill="{StaticResource DefaultButtonGradient}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="Icons/appbar.sound.mute.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Effect" TargetName="img" Value="{StaticResource HoverShadowEffect}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+            <Style x:Key="ActionsStyle" TargetType="ToggleButton">
+                <Setter Property="Width" Value="16" />
+                <Setter Property="Height" Value="16" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Grid >
+                                <Rectangle Name="img" Fill="{StaticResource DefaultButtonGradient}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="Icons/appbar.list.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                    <Setter TargetName="img" Property="Fill" Value="{StaticResource ActivatedButtonGradient}" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Effect" TargetName="img" Value="{StaticResource HoverShadowEffect}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>     
+            <Style x:Key="NotificationsStyle" TargetType="ToggleButton">
+                <Setter Property="Width" Value="16" />
+                <Setter Property="Height" Value="16" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Grid >
+                                <Rectangle Name="img" Fill="{StaticResource DefaultButtonGradient}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="Icons/appbar.flag.wavy.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                    <Setter TargetName="img" Property="Fill" Value="{StaticResource ActivatedButtonGradient}" />   
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Effect" TargetName="img" Value="{StaticResource HoverShadowEffect}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -93,15 +191,28 @@
                 </Setter>
             </Style>
             <Style x:Key="PlayPauseStyle" TargetType="ToggleButton">
+                <Setter Property="Width" Value="16" />
+                <Setter Property="Height" Value="16" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <StackPanel>
-                                <Image Name="img" Source="play.png" Width="16"/>
-                            </StackPanel>
+                            <Grid>
+                                <Rectangle Name="img" Fill="{StaticResource DefaultButtonGradient}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="Icons/appbar.control.play.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Grid>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="ToggleButton.IsChecked" Value="True">
-                                    <Setter TargetName="img" Property="Source" Value="pause.png"/>
+                                    <Setter TargetName="img" Property="OpacityMask" >
+                                        <Setter.Value>
+                                            <ImageBrush ImageSource="Icons/appbar.control.pause.png"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Effect" TargetName="img" Value="{StaticResource HoverShadowEffect}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -109,56 +220,67 @@
                 </Setter>
             </Style>
             <Style x:Key="ResetStyle" TargetType="Button">
+                <Setter Property="Width" Value="16" />
+                <Setter Property="Height" Value="16" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <StackPanel>
-                                <Image Name="img" Source="reset.png" Width="16"/>
-                            </StackPanel>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style x:Key="MuteStyle" TargetType="Button">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate>
-                            <StackPanel>
-                                <Image Name="img" Source="mute.png" Width="24"/>
-                            </StackPanel>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style x:Key="NewStyle" TargetType="Button">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate>
-                            <StackPanel>
-                                <Image Name="img" Source="new.png" Width="24"/>
-                            </StackPanel>
+                            <Grid>
+                                <Rectangle Name="img" Fill="{StaticResource DefaultButtonGradient}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="Icons/appbar.control.rewind.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Effect" TargetName="img" Value="{StaticResource HoverShadowEffect}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style>
             <Style x:Key="EditStyle" TargetType="Button">
+                <Setter Property="Width" Value="16" />
+                <Setter Property="Height" Value="16" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <StackPanel>
-                                <Image Name="img" Source="edit.png" Width="16"/>
-                            </StackPanel>
+                            <Grid>
+                                <Rectangle Name="img" Fill="{StaticResource DefaultButtonGradient}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="Icons/appbar.edit.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Effect" TargetName="img" Value="{StaticResource HoverShadowEffect}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style>
             <Style x:Key="DeleteStyle" TargetType="Button">
+                <Setter Property="Width" Value="16" />
+                <Setter Property="Height" Value="16" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <StackPanel>
-                                <Image Name="img" Source="delete.png" Width="16"/>
-                            </StackPanel>
+                            <Grid>
+                                <Rectangle Name="img" Fill="{StaticResource RedButtonGradient}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="Icons/appbar.delete.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Effect" TargetName="img" Value="{StaticResource HoverShadowEffect}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -177,23 +299,23 @@
                 <Image Source="logo.png" Width="24" />
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Mute" ToolTip="{x:Static p:Resources.MuteAll}" ToolTipService.VerticalOffset="-62"  Command="{Binding StopAllSoundsCommand}" Style="{StaticResource MuteStyle}"></Button>
-                <ToggleButton Content="Lock" ToolTip="{x:Static p:Resources.Lock}"  ToolTipService.VerticalOffset="-62" IsChecked="{Binding Locked}" Style="{StaticResource LockStyle}" />
-                <ToggleButton Content="Show" ToolTipService.VerticalOffset="-62" ToolTip="{x:Static p:Resources.ShowHideCountdowns}" IsChecked="{Binding ShowInactive, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" Style="{StaticResource InactiveStyle}"></ToggleButton>
-                <Button Content="Neu" ToolTipService.VerticalOffset="-62" ToolTip="{x:Static p:Resources.AddCountdown}" Command="{Binding NewCountdownCommand}" Style="{StaticResource NewStyle}"></Button>
+                <Button Margin="2" Content="Mute" ToolTip="{x:Static p:Resources.MuteAll}" ToolTipService.VerticalOffset="-62"  Command="{Binding StopAllSoundsCommand}" Style="{StaticResource MuteStyle}"></Button>
+                <ToggleButton Margin="2" Content="Lock" ToolTip="{x:Static p:Resources.Lock}"  ToolTipService.VerticalOffset="-62" IsChecked="{Binding Locked}" Style="{StaticResource LockStyle}" />
+                <ToggleButton Margin="2" Content="Show" ToolTipService.VerticalOffset="-62" ToolTip="{x:Static p:Resources.ShowHideCountdowns}" IsChecked="{Binding ShowInactive, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" Style="{StaticResource InactiveStyle}"></ToggleButton>
+                <Button Margin="2" Content="Neu" ToolTipService.VerticalOffset="-62" ToolTip="{x:Static p:Resources.AddCountdown}" Command="{Binding NewCountdownCommand}" Style="{StaticResource NewStyle}"></Button>
             </StackPanel>
         </Grid>
         <ListView ItemsSource="{Binding Countdowns}" Grid.Row="1" Background="Transparent" BorderThickness="0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="320">
             <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    <Setter Property="Focusable" Value="false"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="Lime" />
-                            <Setter Property="BorderBrush" Value="{x:Null}" />
-                        </Trigger>
-                    </Style.Triggers>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>                   
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
@@ -209,13 +331,13 @@
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <TextBlock HorizontalAlignment="Left" Grid.Row="0" Text="{Binding Settings.Name}" FontSize="18" Foreground="White"  VerticalAlignment="Top" />
-                            <StackPanel Grid.Row="1" Orientation="Horizontal" Visibility="{Binding IsMouseOver,Converter={StaticResource pb2v}, ConverterParameter=true}">
-                                <ToggleButton Content="Start/Stop" ToolTip="{x:Static p:Resources.StartStopCountdown}" IsChecked="{Binding StartStop, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource PlayPauseStyle}" Visibility="{Binding Settings.UseDuration, Converter={StaticResource b2v}}" />
+                            <StackPanel Background="#33000000"  Grid.Row="1"  Orientation="Horizontal" Visibility="{Binding IsMouseOver,Converter={StaticResource pb2v}, ConverterParameter=true}">
+                                <ToggleButton Content="Start/Stop" ToolTip="{x:Static p:Resources.StartStopCountdown}" IsChecked="{Binding StartStop, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource PlayPauseStyle}" Visibility="{Binding Settings.UseDuration, Converter={StaticResource b2v}}" Margin="0,0,15,0" />
                                 <Button Content="Edit" ToolTip="{x:Static p:Resources.EditCountdown}"  Style="{StaticResource EditStyle}" Command="{Binding EditCommand}" />
-                                <Button Content="Reset" ToolTip="{x:Static p:Resources.ResetCountdown}" Visibility="{Binding Settings.UseDuration, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Converter={StaticResource b2v}}" Style="{StaticResource ResetStyle}" Command="{Binding ResetCommand}" />
-                                <ToggleButton Content="Notify" ToolTip="{x:Static p:Resources.EnableNotify}" IsChecked="{Binding EnableNotifications, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource NotificationsStyle}" />
-                                <ToggleButton Content="Actions" ToolTip="{x:Static p:Resources.EnableExec}" IsChecked="{Binding EnableActions, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource ActionsStyle}" />
-                                <Button Margin="5,0,0,0" ToolTip="{x:Static p:Resources.DeleteCountdown}" Content="Delete" Style="{StaticResource DeleteStyle}" Command="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                <Button Content="Reset" ToolTip="{x:Static p:Resources.ResetCountdown}" Visibility="{Binding Settings.UseDuration, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Converter={StaticResource b2v}}" Style="{StaticResource ResetStyle}" Command="{Binding ResetCommand}" Margin="0,0,15,0" />
+                                <ToggleButton Visibility="{Binding Path=Settings.HasNotifications, Converter={StaticResource b2v}}" Content="Notify" ToolTip="{x:Static p:Resources.EnableNotify}" IsChecked="{Binding EnableNotifications, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource NotificationsStyle}" />
+                                <ToggleButton Visibility="{Binding Path=Settings.HasActions, Converter={StaticResource b2v}}" Content="Actions" ToolTip="{x:Static p:Resources.EnableExec}" IsChecked="{Binding EnableActions, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource ActionsStyle}" />
+                                <Button Margin="15,0,0,0" ToolTip="{x:Static p:Resources.DeleteCountdown}" Content="Delete" Style="{StaticResource DeleteStyle}" Command="{Binding RelativeSource={RelativeSource FindAncestor, 
 AncestorType={x:Type ListView}}, Path=DataContext.DeleteCommand}" CommandParameter="{Binding .}" />
                             </StackPanel>
                         </Grid>
@@ -229,6 +351,5 @@ AncestorType={x:Type ListView}}, Path=DataContext.DeleteCommand}" CommandParamet
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
     </Grid>
 </UserControl>

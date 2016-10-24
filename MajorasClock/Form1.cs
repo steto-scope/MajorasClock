@@ -90,8 +90,11 @@ namespace MajorasClock
 
              //int initialStyle = GetWindowLong(this.Handle, -20);
             // SetWindowLong(this.Handle, -20, initialStyle | 0x80000 | 0x20);
-             
-            DockStart();
+            
+ 
+            //DockStart();
+
+
             //SetLayeredWindowAttributes(Handle, 0, 128, LWA_COLORKEY);
         }
 

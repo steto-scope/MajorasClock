@@ -158,45 +158,38 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="actions.png" />
-    <Resource Include="noactions.png" />
-    <Resource Include="reset.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="new.png" />
-    <Resource Include="delete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="notify.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="nonotify.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="pause.png" />
-    <Resource Include="play.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="edit.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="showinactive.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="hideinactive.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="eject.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="unlock.png" />
-    <Resource Include="lock.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="mute.png" />
+    <Resource Include="Icons\appbar.magnify.add.png" />
+    <Resource Include="Icons\appbar.magnify.minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\appbar.lock.png" />
+    <Resource Include="Icons\appbar.unlock.keyhole.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\appbar.sound.mute.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\appbar.add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\appbar.delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\appbar.edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\appbar.list.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\appbar.flag.wavy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\appbar.control.pause.png" />
+    <Resource Include="Icons\appbar.control.play.png" />
+    <Resource Include="Icons\appbar.control.rewind.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

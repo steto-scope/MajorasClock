@@ -26,12 +26,26 @@ namespace TerribleFate
             set { Set("Name", value); }
         }
 
+        public bool HasActions
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(ExecuteString);
+            }
+        }
 
+        public bool HasNotifications
+        {
+            get
+            {
+                return NotifyByOverlay || NotifyByOverlayFade || NotifyBySound || NotifyByTray;
+            }
+        }
 
         public string ExecuteString
         {
             get { return Get<string>("ExecuteString"); }
-            set { Set("ExecuteString", value); }
+            set { Set("ExecuteString", value); OnPropertyChanged("HasActions"); }
         }
 
         public string Description
@@ -50,24 +64,24 @@ namespace TerribleFate
         public bool NotifyBySound
         {
             get { return Get<bool>("NotifyBySound"); }
-            set { Set("NotifyBySound", value); }
+            set { Set("NotifyBySound", value); OnPropertyChanged("HasNotifications"); }
         }
 
         public bool NotifyByTray
         {
             get { return Get<bool>("NotifyByTray"); }
-            set { Set("NotifyByTray", value); }
+            set { Set("NotifyByTray", value); OnPropertyChanged("HasNotifications"); }
         }
 
         public bool NotifyByOverlay
         {
             get { return Get<bool>("NotifyByOverlay"); }
-            set { Set("NotifyByOverlay", value); }
+            set { Set("NotifyByOverlay", value); OnPropertyChanged("HasNotifications"); }
         }
         public bool NotifyByOverlayFade
         {
             get { return Get<bool>("NotifyByOverlayFade"); }
-            set { Set("NotifyByOverlayFade", value); }
+            set { Set("NotifyByOverlayFade", value); OnPropertyChanged("HasNotifications"); }
         }
 
         public string SoundToPlay
