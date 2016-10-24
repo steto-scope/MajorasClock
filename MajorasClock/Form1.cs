@@ -86,16 +86,25 @@ namespace MajorasClock
             
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
              this.AutoSize = true;
-            
-
+             
+             SystemEvents.SessionEnding += SystemEvents_SessionEnding;
              //int initialStyle = GetWindowLong(this.Handle, -20);
             // SetWindowLong(this.Handle, -20, initialStyle | 0x80000 | 0x20);
             
+            SystemEvents.SessionEnding+=SystemEvents_SessionEnding;
  
             //DockStart();
 
 
             //SetLayeredWindowAttributes(Handle, 0, 128, LWA_COLORKEY);
+        }
+
+
+        void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
+        {
+            UpdateLocation();
+            cc.ViewModel.SaveCountdowns();
+            cc.ViewModel.SaveConfig();
         }
 
         void ViewModel_SizeChanged(object sender, EventArgs e)
@@ -134,16 +143,20 @@ namespace MajorasClock
             cc.Background = iss;
         }
 
-
-
-        void ViewModel_CloseRequest(object sender, EventArgs e)
+        public void UpdateLocation()
         {
             if (cc.ViewModel != null)
             {
                 cc.ViewModel.Config.Left = Location.X;
                 cc.ViewModel.Config.Top = Location.Y;
-                cc.ViewModel.Save();
             }
+        }
+
+        void ViewModel_CloseRequest(object sender, EventArgs e)
+        {
+            UpdateLocation();
+            cc.ViewModel.SaveCountdowns();
+            cc.ViewModel.SaveConfig();
             Close();
         }
 
@@ -185,6 +198,7 @@ namespace MajorasClock
                     MouseLoc = new Point(e.X, e.Y);
                 }
                 Location = new Point(Location.X + e.X - MouseLoc.X, Location.Y + e.Y - MouseLoc.Y);
+                UpdateLocation();
             }
         }
 

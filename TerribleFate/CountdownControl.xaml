@@ -34,7 +34,7 @@
                 <GradientStop Color="#FFFFa588" Offset="0" />
                 <GradientStop Color="#FFFFa500" Offset="1" />
             </LinearGradientBrush>
-            <DropShadowEffect x:Key="HoverShadowEffect" Color="Cyan" BlurRadius="5" ShadowDepth="0" />
+            <DropShadowEffect x:Key="HoverShadowEffect" Color="{x:Static SystemColors.ActiveCaptionColor}" BlurRadius="10" ShadowDepth="0" />
 
             <Style x:Key="LockStyle" TargetType="ToggleButton">
                 <Setter Property="Width" Value="18" />
@@ -292,8 +292,8 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Visibility="{Binding IsMouseOver, Converter={StaticResource pb2v}, ConverterParameter=true}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="160" />
-                <ColumnDefinition Width="160" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <Image Source="logo.png" Width="24" />

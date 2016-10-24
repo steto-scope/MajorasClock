@@ -66,7 +66,8 @@ namespace TerribleFate
             Config = new AppSettings();
             CountdownCollection = new ObservableCollection<Countdown>();
             CountdownCollection.CollectionChanged += Countdowns_CollectionChanged;
-            
+
+            SizeChanged += MainViewModel_SizeChanged;
             
             /*Countdown dt = new Countdown();
            
@@ -86,6 +87,11 @@ namespace TerribleFate
             
             dt.Start();
             ddt.Start();*/
+        }
+
+        void MainViewModel_SizeChanged(object sender, EventArgs e)
+        {
+            SaveConfig();
         }
 
         void Countdowns_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -144,9 +150,10 @@ namespace TerribleFate
             {
                 Countdown c = new Countdown();
                 c.Settings = w.Settings;
-                if (c.Settings.UseDate)
+                //if (c.Settings.UseDate)
                     c.Start();
                 CountdownCollection.Add(c);
+                SaveCountdowns();
             }
         }
 
@@ -174,6 +181,7 @@ namespace TerribleFate
             {
                 c.Stop();
                 CountdownCollection.Remove(c);
+                SaveCountdowns();
             }
         }
 
@@ -255,7 +263,31 @@ namespace TerribleFate
 
 
 
-        public void Save()
+        public void SaveConfig()
+        {           
+
+            try
+            {
+                XmlSerializer s = new XmlSerializer(typeof(AppSettings));
+                if (!Directory.Exists(AppSettings.ConfigSaveFilePath))
+                    Directory.CreateDirectory(AppSettings.ConfigSaveFilePath);
+                File.Delete(AppSettings.ConfigSaveFile);
+                Stream f = File.OpenWrite(AppSettings.ConfigSaveFile);
+                s.Serialize(f, Config);
+                f.Close();
+            }
+            catch (Exception e)
+            {
+                FileStream errfs = File.OpenWrite(AppSettings.ConfigSaveFilePath + "\\err.log");
+                StreamWriter sw = new StreamWriter(errfs);
+                sw.WriteLine(DateTime.Now);
+                sw.Write(e.Message);
+                sw.WriteLine("\n\n\n");
+                sw.Close();
+            }
+        }
+
+        public void SaveCountdowns()
         {
             try
             {
@@ -268,19 +300,15 @@ namespace TerribleFate
                 s.Serialize(f, CountdownCollection);
                 f.Close();
             }
-            catch { }
-
-            try
+            catch (Exception e)
             {
-                XmlSerializer s = new XmlSerializer(typeof(AppSettings));
-                if (!Directory.Exists(AppSettings.ConfigSaveFilePath))
-                    Directory.CreateDirectory(AppSettings.ConfigSaveFilePath);
-                File.Delete(AppSettings.ConfigSaveFile);
-                Stream f = File.OpenWrite(AppSettings.ConfigSaveFile);
-                s.Serialize(f, Config);
-                f.Close();
+                FileStream errfs = File.OpenWrite(AppSettings.ConfigSaveFilePath + "\\err.log");
+                StreamWriter sw = new StreamWriter(errfs);
+                sw.WriteLine(DateTime.Now);
+                sw.Write(e.Message);
+                sw.WriteLine("\n\n\n");
+                sw.Close();
             }
-            catch { }
         }
 
         public void Load()

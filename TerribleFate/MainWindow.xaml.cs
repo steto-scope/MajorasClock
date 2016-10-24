@@ -215,7 +215,7 @@ namespace TerribleFate
             MainViewModel mw = DataContext as MainViewModel;
             if(mw!=null)
             {
-                mw.Save();
+                mw.SaveConfig();
             }
         }
     }
