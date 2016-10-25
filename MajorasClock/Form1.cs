@@ -60,7 +60,8 @@ namespace MajorasClock
         {
 
             
-            cc = new CountdownControl();
+            cc = new CountdownControl(Program.Args.Contains("-i"));         
+
             Point p = new Point((int)cc.ViewModel.Config.Left, (int)cc.ViewModel.Config.Top);
             StartPosition = FormStartPosition.Manual;
             Location = p;
@@ -93,7 +94,7 @@ namespace MajorasClock
             
             SystemEvents.SessionEnding+=SystemEvents_SessionEnding;
  
-            //DockStart();
+            DockStart();
 
 
             //SetLayeredWindowAttributes(Handle, 0, 128, LWA_COLORKEY);

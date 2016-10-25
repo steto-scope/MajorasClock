@@ -22,16 +22,45 @@ namespace TerribleFate
     /// </summary>
     public partial class CountdownControl : UserControl
     {
-        public CountdownControl()
+        public CountdownControl(bool dark)
         {
             InitializeComponent();
+            InvertColors(dark);
             var mw = new MainViewModel();
             mw.Load();
             DataContext = mw;
-            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata( XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag))); 
+            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata( XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+
+            
         }
 
+        
 
+        public void InvertColors(bool dark)
+        {
+            if (dark)
+            {
+                SolidColorBrush s = (SolidColorBrush)TryFindResource("TextBrush");
+                s.Color = Colors.White;
+                LinearGradientBrush dbg = (LinearGradientBrush)TryFindResource("DefaultButtonGradient");
+                dbg.GradientStops.Clear();
+                dbg.GradientStops.Add(new GradientStop() { Color = Color.FromRgb(136, 136, 136), Offset = 0 });
+                dbg.GradientStops.Add(new GradientStop() { Color = Color.FromRgb(255, 255, 255), Offset = 1 });
+                AppSettings.unlockedheader = new SolidColorBrush(Colors.Black);
+                
+            }
+            else
+            {
+              
+                SolidColorBrush s = (SolidColorBrush)TryFindResource("TextBrush");
+                s.Color = Colors.Black;
+                LinearGradientBrush dbg = (LinearGradientBrush)TryFindResource("DefaultButtonGradient");
+                dbg.GradientStops.Clear();
+                dbg.GradientStops.Add(new GradientStop() { Color = Color.FromRgb(0, 0, 0), Offset = 0 });
+                dbg.GradientStops.Add(new GradientStop() { Color = Color.FromRgb(128, 128, 128), Offset = 1 });
+                AppSettings.unlockedheader = new SolidColorBrush(Colors.White);
+            }
+        }
 
         public MainViewModel ViewModel
         {

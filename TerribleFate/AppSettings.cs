@@ -31,6 +31,7 @@ namespace TerribleFate
             set { Set("TextBrush", value); }
         }
 
+
         public double Left
         {
             get { return Get<double>("Left"); }
@@ -57,7 +58,7 @@ namespace TerribleFate
         }
 
         private bool useLockedColor;
-        private static SolidColorBrush unlockedheader = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
+        public  static SolidColorBrush unlockedheader = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
         private static SolidColorBrush lockedheader = new SolidColorBrush(Colors.Transparent);
         public Brush HeaderColor
         {

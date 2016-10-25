@@ -7,6 +7,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d"  x:Name="window" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <LinearGradientBrush x:Key="DefaultButtonGradient" StartPoint="0,0"  EndPoint="1,1">
+                <GradientStop Color="#FF888888" Offset="0" />
+                <GradientStop Color="White" Offset="1" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="RedButtonGradient">
+                <GradientStop Color="#FFFF8888" Offset="0" />
+                <GradientStop Color="#FFFF0000" Offset="1" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="ActivatedButtonGradient">
+                <GradientStop Color="#FFFFa588" Offset="0" />
+                <GradientStop Color="#FFFFa500" Offset="1" />
+            </LinearGradientBrush>
+            <DropShadowEffect x:Key="HoverShadowEffect" Color="{x:Static SystemColors.ActiveCaptionColor}" BlurRadius="10" ShadowDepth="0" />
+            <SolidColorBrush x:Key="TextBrush" Color="White"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid Background="{Binding Config.HeaderColor}" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
         <Grid.ContextMenu>
             <ContextMenu>
@@ -22,19 +40,7 @@
             <BooleanToVisibilityConverter x:Key="b2v" />
             <local:ParametrizedBooleanToVisibilityConverter x:Key="pb2v" />
             <local:TimeSpanToStringConverter x:Key="tsts" />
-            <LinearGradientBrush x:Key="DefaultButtonGradient">
-                <GradientStop Color="#FF888888" Offset="0" />
-                <GradientStop Color="White" Offset="1" />
-            </LinearGradientBrush>
-            <LinearGradientBrush x:Key="RedButtonGradient">
-                <GradientStop Color="#FFFF8888" Offset="0" />
-                <GradientStop Color="#FFFF0000" Offset="1" />
-            </LinearGradientBrush>
-            <LinearGradientBrush x:Key="ActivatedButtonGradient">
-                <GradientStop Color="#FFFFa588" Offset="0" />
-                <GradientStop Color="#FFFFa500" Offset="1" />
-            </LinearGradientBrush>
-            <DropShadowEffect x:Key="HoverShadowEffect" Color="{x:Static SystemColors.ActiveCaptionColor}" BlurRadius="10" ShadowDepth="0" />
+           
 
             <Style x:Key="LockStyle" TargetType="ToggleButton">
                 <Setter Property="Width" Value="18" />
@@ -305,7 +311,7 @@
                 <Button Margin="2" Content="Neu" ToolTipService.VerticalOffset="-62" ToolTip="{x:Static p:Resources.AddCountdown}" Command="{Binding NewCountdownCommand}" Style="{StaticResource NewStyle}"></Button>
             </StackPanel>
         </Grid>
-        <ListView ItemsSource="{Binding Countdowns}" Grid.Row="1" Background="Transparent" BorderThickness="0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="320">
+        <ListView Name="lv" ItemsSource="{Binding Countdowns}" Grid.Row="1" Background="Transparent" BorderThickness="0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="320">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Background" Value="Transparent" />
@@ -330,8 +336,8 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <TextBlock HorizontalAlignment="Left" Grid.Row="0" Text="{Binding Settings.Name}" FontSize="18" Foreground="White"  VerticalAlignment="Top" />
-                            <StackPanel Background="#33000000"  Grid.Row="1"  Orientation="Horizontal" Visibility="{Binding IsMouseOver,Converter={StaticResource pb2v}, ConverterParameter=true}">
+                            <TextBlock HorizontalAlignment="Left" Foreground="{DynamicResource TextBrush}" Grid.Row="0" Text="{Binding Settings.Name}" FontSize="18" VerticalAlignment="Top" />
+                            <StackPanel  Grid.Row="1"  Orientation="Horizontal" Visibility="{Binding IsMouseOver,Converter={StaticResource pb2v}, ConverterParameter=true}">
                                 <ToggleButton Content="Start/Stop" ToolTip="{x:Static p:Resources.StartStopCountdown}" IsChecked="{Binding StartStop, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource PlayPauseStyle}" Visibility="{Binding Settings.UseDuration, Converter={StaticResource b2v}}" Margin="0,0,15,0" />
                                 <Button Content="Edit" ToolTip="{x:Static p:Resources.EditCountdown}"  Style="{StaticResource EditStyle}" Command="{Binding EditCommand}" />
                                 <Button Content="Reset" ToolTip="{x:Static p:Resources.ResetCountdown}" Visibility="{Binding Settings.UseDuration, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Converter={StaticResource b2v}}" Style="{StaticResource ResetStyle}" Command="{Binding ResetCommand}" Margin="0,0,15,0" />
@@ -342,8 +348,8 @@ AncestorType={x:Type ListView}}, Path=DataContext.DeleteCommand}" CommandParamet
                             </StackPanel>
                         </Grid>
                         <StackPanel Grid.Column="1">
-                            <TextBlock Text="{Binding Left, Converter={StaticResource tsts}}"  HorizontalAlignment="Right" FontSize="28" Foreground="White" />
-                            <TextBlock Text="{Binding CurrentEndDate}" HorizontalAlignment="Right" Foreground="White" />
+                            <TextBlock Foreground="{DynamicResource TextBrush}" Text="{Binding Left, Converter={StaticResource tsts}}"  HorizontalAlignment="Right" FontSize="28" />
+                            <TextBlock Foreground="{DynamicResource TextBrush}" Text="{Binding CurrentEndDate}" HorizontalAlignment="Right" />
                         </StackPanel>
 
                     </Grid>
