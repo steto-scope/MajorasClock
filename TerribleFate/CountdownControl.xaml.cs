@@ -45,8 +45,7 @@ namespace TerribleFate
                 LinearGradientBrush dbg = (LinearGradientBrush)TryFindResource("DefaultButtonGradient");
                 dbg.GradientStops.Clear();
                 dbg.GradientStops.Add(new GradientStop() { Color = Color.FromRgb(136, 136, 136), Offset = 0 });
-                dbg.GradientStops.Add(new GradientStop() { Color = Color.FromRgb(255, 255, 255), Offset = 1 });
-                AppSettings.unlockedheader = new SolidColorBrush(Colors.Black);
+                dbg.GradientStops.Add(new GradientStop() { Color = Color.FromRgb(255, 255, 255), Offset = 1 });        
                 
             }
             else
@@ -58,7 +57,6 @@ namespace TerribleFate
                 dbg.GradientStops.Clear();
                 dbg.GradientStops.Add(new GradientStop() { Color = Color.FromRgb(0, 0, 0), Offset = 0 });
                 dbg.GradientStops.Add(new GradientStop() { Color = Color.FromRgb(128, 128, 128), Offset = 1 });
-                AppSettings.unlockedheader = new SolidColorBrush(Colors.White);
             }
         }
 
