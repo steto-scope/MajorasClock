@@ -296,7 +296,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Visibility="{Binding IsMouseOver, Converter={StaticResource pb2v}, ConverterParameter=true}">
+        <Grid Grid.Row="0" Visibility="{Binding ShowHeaderMenu, Converter={StaticResource pb2v}, ConverterParameter=true}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -307,11 +307,11 @@
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Margin="2" Content="Mute" ToolTip="{x:Static p:Resources.MuteAll}" ToolTipService.VerticalOffset="-62"  Command="{Binding StopAllSoundsCommand}" Style="{StaticResource MuteStyle}"></Button>
                 <ToggleButton Margin="2" Content="Lock" ToolTip="{x:Static p:Resources.Lock}"  ToolTipService.VerticalOffset="-62" IsChecked="{Binding Locked}" Style="{StaticResource LockStyle}" />
-                <ToggleButton Margin="2" Content="Show" ToolTipService.VerticalOffset="-62" ToolTip="{x:Static p:Resources.ShowHideCountdowns}" IsChecked="{Binding ShowInactive, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" Style="{StaticResource InactiveStyle}"></ToggleButton>
+                <ToggleButton Visibility="Collapsed" Margin="2" Content="Show" ToolTipService.VerticalOffset="-62" ToolTip="{x:Static p:Resources.ShowHideCountdowns}" IsChecked="{Binding ShowInactive, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" Style="{StaticResource InactiveStyle}"></ToggleButton>
                 <Button Margin="2" Content="Neu" ToolTipService.VerticalOffset="-62" ToolTip="{x:Static p:Resources.AddCountdown}" Command="{Binding NewCountdownCommand}" Style="{StaticResource NewStyle}"></Button>
             </StackPanel>
         </Grid>
-        <ListView Name="lv" ItemsSource="{Binding Countdowns}" Grid.Row="1" Background="Transparent" BorderThickness="0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="320">
+        <ListView Name="lv" MinHeight="1" ItemsSource="{Binding Countdowns}" Grid.Row="1" Background="Transparent" BorderThickness="0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="320">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Background" Value="Transparent" />

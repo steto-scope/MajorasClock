@@ -95,11 +95,21 @@ namespace MajorasClock
             // SetWindowLong(this.Handle, -20, initialStyle | 0x80000 | 0x20);
             
             SystemEvents.SessionEnding+=SystemEvents_SessionEnding;
+            SystemEvents.UserPreferenceChanged += SystemEvents_UserPreferenceChanged;
  
             DockStart();
 
 
             //SetLayeredWindowAttributes(Handle, 0, 128, LWA_COLORKEY);
+        }
+
+        void SystemEvents_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
+        {
+            //todo: trigger background-update here 
+            /*if (e.Category == UserPreferenceCategory.Desktop)
+            {
+                UpdateBackgroundImage();
+            }*/
         }
 
         void cc_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
@@ -110,6 +120,9 @@ namespace MajorasClock
 
         void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
         {
+            SystemEvents.UserPreferenceChanged -= SystemEvents_UserPreferenceChanged;
+            SystemEvents.SessionEnding -= SystemEvents_SessionEnding;
+
             UpdateLocation();
             cc.ViewModel.SaveCountdowns();
             cc.ViewModel.SaveConfig();
@@ -191,6 +204,8 @@ namespace MajorasClock
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            SystemEvents.UserPreferenceChanged -= SystemEvents_UserPreferenceChanged;
+            SystemEvents.SessionEnding -= SystemEvents_SessionEnding;
             DockStop();
         }
 
@@ -259,7 +274,9 @@ namespace MajorasClock
                 {
                     ScreenCapture sc = new ScreenCapture();
                     Visible = false;
+                    
                     Bitmap i = (Bitmap)sc.CaptureWindow(GetShellWindow());
+                    
                     Visible = true;
 
                     return i;

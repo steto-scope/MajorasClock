@@ -46,15 +46,21 @@ namespace TerribleFate
             {
                 Set("ShowInactive", value); 
                 OnPropertyChanged("Countdowns");
-                if (SizeChanged != null)
-                    SizeChanged(null, null);
             }
         }
 
         public bool IsMouseOver
         {
             get { return Get<bool>("IsMouseOver"); }
-            set { Set("IsMouseOver", value);  }
+            set { Set("IsMouseOver", value); OnPropertyChanged("ShowHeaderMenu"); }
+        }
+
+        public bool ShowHeaderMenu
+        {
+            get
+            {
+                return IsMouseOver || Countdowns.Count()<1 ;
+            }
         }
 
 
@@ -67,6 +73,8 @@ namespace TerribleFate
             CountdownCollection.CollectionChanged += Countdowns_CollectionChanged;
 
             SizeChanged += MainViewModel_SizeChanged;
+
+            ShowInactive = true;
             
             /*Countdown dt = new Countdown();
            
@@ -96,6 +104,7 @@ namespace TerribleFate
         void Countdowns_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged("Countdowns");
+            OnPropertyChanged("ShowHeaderMenu");
             if (SizeChanged != null)
                 SizeChanged(null, null);
         }
