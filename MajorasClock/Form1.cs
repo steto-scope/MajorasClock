@@ -60,7 +60,8 @@ namespace MajorasClock
         {
 
             
-            cc = new CountdownControl(Program.Args.Contains("-i"));         
+            cc = new CountdownControl(Program.Args.Contains("-i"));
+            cc.SizeChanged += cc_SizeChanged;
 
             Point p = new Point((int)cc.ViewModel.Config.Left, (int)cc.ViewModel.Config.Top);
             StartPosition = FormStartPosition.Manual;
@@ -81,9 +82,10 @@ namespace MajorasClock
             cc.MouseMove += u_MouseMove;
             cc.MouseUp += u_MouseUp;
             cc.PreviewMouseDown += cc_MouseDown;
-            cc.ViewModel.SizeChanged += ViewModel_SizeChanged;
-
+           
             elementHost1.AutoSize = true;
+
+            UpdateBackgroundImage();
             
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
              this.AutoSize = true;
@@ -100,6 +102,11 @@ namespace MajorasClock
             //SetLayeredWindowAttributes(Handle, 0, 128, LWA_COLORKEY);
         }
 
+        void cc_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        {
+            UpdateBackground();
+        }
+
 
         void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
         {
@@ -108,10 +115,6 @@ namespace MajorasClock
             cc.ViewModel.SaveConfig();
         }
 
-        void ViewModel_SizeChanged(object sender, EventArgs e)
-        {
-            t.Start();
-        }
 
         void cc_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -130,10 +133,8 @@ namespace MajorasClock
            t.Stop();
         }
 
-
-        private void UpdateBackground()
+        private void UpdateBackgroundImage()
         {
-
             Bitmap i = Screenshot();
             var bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(i.GetHbitmap(),
                                                                  IntPtr.Zero,
@@ -141,11 +142,19 @@ namespace MajorasClock
                                                                  System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions()
                 );
             iss = new ImageBrush(bitmapSource);
+            iss.ViewboxUnits = BrushMappingMode.Absolute;
+            
             cc.Background = iss;
+        }
+
+        private void UpdateBackground()
+        {
+            iss.Viewbox = new System.Windows.Rect(Left, Top, Width, Height);          
         }
 
         public void UpdateLocation()
         {
+            UpdateBackground();
             if (cc.ViewModel != null)
             {
                 cc.ViewModel.Config.Left = Location.X;
@@ -241,18 +250,20 @@ namespace MajorasClock
         Bitmap Screenshot()
         {
 
-            
+            //var bounds = Screen.FromControl(this).Bounds;
 
-            Bitmap bmpScreenCapture = new Bitmap(Size.Width, Size.Height);
+            //Bitmap bmpScreenCapture = new Bitmap(bounds.Width,bounds.Height);
 
             {
-                using (Graphics g = Graphics.FromImage(bmpScreenCapture))
+              //  using (Graphics g = Graphics.FromImage(bmpScreenCapture))
                 {
                     ScreenCapture sc = new ScreenCapture();
                     Visible = false;
                     Bitmap i = (Bitmap)sc.CaptureWindow(GetShellWindow());
                     Visible = true;
-                    g.DrawImage(i,0,0, new Rectangle(Location.X, Location.Y,Size.Width, Size.Height), GraphicsUnit.Pixel);
+
+                    return i;
+                    //g.DrawImage(i,0,0, new Rectangle(Location.X, Location.Y,Size.Width, Size.Height), GraphicsUnit.Pixel);
                     
                     
                 }
@@ -260,7 +271,7 @@ namespace MajorasClock
 
 
 
-            return bmpScreenCapture;
+          //  return bmpScreenCapture;
         }
 
         private void Form1_Shown(object sender, EventArgs e)

@@ -25,7 +25,7 @@
             <SolidColorBrush x:Key="TextBrush" Color="White"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Background="{Binding Config.HeaderColor}" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
+    <Grid Background="#01000000" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
         <Grid.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="{x:Static p:Resources.Info}" Command="{Binding InfoCommand}" />
