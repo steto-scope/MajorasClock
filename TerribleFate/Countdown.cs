@@ -14,9 +14,11 @@ namespace TerribleFate
 {
     public class Countdown : BaseObject
     {
+        public Guid Guid { get; set; }
 
         public Countdown()
         {
+            Guid = Guid.NewGuid();
             EnableNotifications = true;
             EnableActions = true;
             Running = false;
@@ -79,7 +81,7 @@ namespace TerribleFate
                         ResetCountdown();
 
                 ct = new CancellationTokenSource();
-                var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
+                var scheduler = TaskScheduler.Default;
                 if (Settings.UseDuration)
                     t = Task.Run(() => CountDuration(ct.Token), ct.Token).ContinueWith(r => Notify(), scheduler);
                 else
@@ -137,11 +139,23 @@ namespace TerribleFate
             ct.Cancel();
         }
 
-        public void ResetCountdown()
+        public void ResetCountdown(int el=0)
         {
             if (Settings.UseDuration)
             {
-                Elapsed = 0;
+                if (el == 0)
+                    Elapsed = 0;
+                else
+                    Elapsed = Math.Max(0,(long)Settings.Duration.Subtract(TimeSpan.FromSeconds(el)).TotalSeconds);
+            }
+            else
+            {
+                if (el != 0)
+                {
+                    DateTime newend = DateTime.Now.Add(TimeSpan.FromSeconds(el));
+                    Settings.EndDate = newend;
+                    Elapsed = (long)newend.Subtract(DateTime.Now).TotalSeconds;
+                }
             }
         }
 
@@ -215,7 +229,7 @@ namespace TerribleFate
 
             if(Settings.NotifyByOverlay)
             {
-                Process.Start("notifier.exe", "-message \""+this.Settings.Name+"\"");
+                Process.Start("notifier.exe", "-message \""+this.Settings.Name+"\" -g "+Guid.ToString());
                 //Overlay o = new TerribleFate.Overlay(this);
                 //o.Show();
             }

@@ -43,10 +43,7 @@ namespace MajorasClock
 
             si.ArgumentsReceived += (a,b) => 
             {
-                if(b.Args.Contains("-m"))
-                {
-                    mv.StopAllSoundsCommand.Execute(null);
-                }
+                mv.ApplyArguments(b.Args);
             };            
            
             Application.Run(f);

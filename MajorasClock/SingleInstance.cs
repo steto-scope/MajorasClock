@@ -131,11 +131,16 @@ namespace MajorasClock
         {
             if (!disposed)
             {
-                if (mutex != null && ownsMutex)
+                try
                 {
-                    mutex.ReleaseMutex();
-                    mutex = null;
+                    if (mutex != null && ownsMutex)
+                    {
+                        mutex.ReleaseMutex();
+                        mutex = null;
+                    }
                 }
+                catch { }
+
                 disposed = true;
             }
         }

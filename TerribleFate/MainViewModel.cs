@@ -16,7 +16,7 @@ namespace TerribleFate
         private ObservableCollection<Countdown> CountdownCollection
         {
             get { return Get<ObservableCollection<Countdown>>("Countdowns"); }
-            set { Set("Countdowns",value); }
+            set { Set("Countdowns", value); }
         }
 
 
@@ -27,7 +27,7 @@ namespace TerribleFate
             {
                 Set("Locked", value);
                 Config.LockedSerialized = value;
-                if(value)
+                if (value)
                     if (SizeChanged != null)
                         SizeChanged(null, null);
             }
@@ -44,7 +44,7 @@ namespace TerribleFate
             get { return Get<bool>("ShowInactive"); }
             set
             {
-                Set("ShowInactive", value); 
+                Set("ShowInactive", value);
                 OnPropertyChanged("Countdowns");
             }
         }
@@ -59,9 +59,11 @@ namespace TerribleFate
         {
             get
             {
-                return IsMouseOver || Countdowns.Count()<1 ;
+                return IsMouseOver || Countdowns.Count() < 1;
             }
         }
+
+
 
 
         public event EventHandler SizeChanged;
@@ -75,7 +77,7 @@ namespace TerribleFate
             SizeChanged += MainViewModel_SizeChanged;
 
             ShowInactive = true;
-            
+
             /*Countdown dt = new Countdown();
            
             dt.EnableActions=true;
@@ -94,6 +96,37 @@ namespace TerribleFate
             
             dt.Start();
             ddt.Start();*/
+        }
+
+        public void ApplyArguments(string[] args)
+        {
+            if (args.Contains("-m"))
+            {
+                StopAllSoundsCommand.Execute(null);
+            }
+            if (args.Contains("-r"))
+            {
+                try
+                {
+                    int pos = args.ToList().IndexOf("-r");
+                    if (args.Length >= pos + 2)
+                    {
+                        int seconds = int.Parse(args[pos + 1]);
+                        string guid = args[pos + 2];
+
+                        var c = CountdownCollection.FirstOrDefault(f => f.Guid.ToString() == guid);
+                        if (c != null)
+                        {
+                            c.ResetCountdown(seconds);
+                            c.Start();
+                        }
+                    }
+                }
+                catch(Exception e)
+                {
+
+                }
+            }
         }
 
         void MainViewModel_SizeChanged(object sender, EventArgs e)
@@ -154,12 +187,12 @@ namespace TerribleFate
         {
             EditWindow w = new EditWindow();
             w.ShowDialog();
-            if(w.Settings !=null)
+            if (w.Settings != null)
             {
                 Countdown c = new Countdown();
                 c.Settings = w.Settings;
                 //if (c.Settings.UseDate)
-                    c.Start();
+                c.Start();
                 CountdownCollection.Add(c);
                 SaveCountdowns();
             }
@@ -185,7 +218,7 @@ namespace TerribleFate
         public void Delete(object param)
         {
             Countdown c = param as Countdown;
-            if(c!=null)
+            if (c != null)
             {
                 c.Stop();
                 CountdownCollection.Remove(c);
@@ -272,7 +305,7 @@ namespace TerribleFate
 
 
         public void SaveConfig()
-        {           
+        {
 
             try
             {

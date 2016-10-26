@@ -31,6 +31,16 @@ namespace notifier
             dt.Interval = TimeSpan.FromSeconds(App.Timeout);
             dt.Tick += dt_Tick;
             dt.Start();
+
+            Loaded += MainWindow_Loaded;
+
+        
+        }
+
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {    
+            this.Left = SystemParameters.PrimaryScreenWidth - this.Width -20;
+            this.Top = SystemParameters.PrimaryScreenHeight - this.Height - 60;           
         }
 
         void dt_Tick(object sender, EventArgs e)
@@ -52,6 +62,18 @@ namespace notifier
             {
                 Process proc = new Process();
                 ProcessStartInfo psi = new ProcessStartInfo(p, "-m");
+                proc.StartInfo = psi;
+                proc.Start();
+            }
+        }
+
+        private void ResetTime(int seconds)
+        {
+            string p = GetPathOfExecutable();
+            if (p != null)
+            {
+                Process proc = new Process();
+                ProcessStartInfo psi = new ProcessStartInfo(p, "-r "+seconds+" "+App.TimerGuid);
                 proc.StartInfo = psi;
                 proc.Start();
             }
@@ -80,6 +102,68 @@ namespace notifier
                 }
             }
             return null;
+        }
+
+        private void p1_Click(object sender, RoutedEventArgs e)
+        {
+            Mute();
+            ResetTime(60);
+            Close();
+        }
+
+        private void p2_Click(object sender, RoutedEventArgs e)
+        {
+            Mute();
+            ResetTime(120);
+            Close();
+        }
+
+        private void p3_Click(object sender, RoutedEventArgs e)
+        {
+            Mute();
+            ResetTime(300);
+            Close();
+        }
+
+        private void p4_Click(object sender, RoutedEventArgs e)
+        {
+            Mute();
+            ResetTime(600);
+            Close();
+        }
+
+        private void p5_Click(object sender, RoutedEventArgs e)
+        {
+            Mute();
+            ResetTime(900);
+            Close();
+        }
+
+        private void p6_Click(object sender, RoutedEventArgs e)
+        {
+            Mute();
+            ResetTime(1800);
+            Close();
+        }
+
+        private void p7_Click(object sender, RoutedEventArgs e)
+        {
+            Mute();
+            ResetTime(3600);
+            Close();
+        }
+
+        private void p9_Click(object sender, RoutedEventArgs e)
+        {
+            ResetTime(0);
+            Close();
+        }
+
+        private void p8_Click(object sender, RoutedEventArgs e)
+        {
+            Mute();
+            ResetTime(30);
+            Close();
         }
     }
 

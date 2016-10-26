@@ -15,6 +15,7 @@ namespace notifier
     {
         public static string Text { get; set; }
         public static int Timeout { get; set; }
+        public static string TimerGuid { get; set; }
         protected override void OnStartup(StartupEventArgs e)
         {
             Timeout = 7200;
@@ -34,6 +35,10 @@ namespace notifier
                 if ((a == "-m" || a == "-message") && i + 1 < e.Args.Length)
                 {
                     Text = e.Args[i + 1];
+                }
+                if ((a == "-g" || a == "-guid") && i + 1 < e.Args.Length)
+                {
+                    TimerGuid = e.Args[i + 1];
                 }
             }
                 base.OnStartup(e);
