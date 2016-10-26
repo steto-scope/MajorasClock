@@ -348,7 +348,7 @@ AncestorType={x:Type ListView}}, Path=DataContext.DeleteCommand}" CommandParamet
                             </StackPanel>
                         </Grid>
                         <StackPanel Grid.Column="1">
-                            <TextBlock Foreground="{DynamicResource TextBrush}" Text="{Binding Left, Converter={StaticResource tsts}}"  HorizontalAlignment="Right" FontSize="28" />
+                            <TextBlock Foreground="{DynamicResource TextBrush}" Text="{Binding Left, Converter={StaticResource tsts}}" MouseDown="TextBlock_MouseDown"  HorizontalAlignment="Right" FontSize="28" />
                             <TextBlock Foreground="{DynamicResource TextBrush}" Text="{Binding CurrentEndDate}" HorizontalAlignment="Right" />
                         </StackPanel>
 

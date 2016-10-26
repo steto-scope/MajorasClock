@@ -100,5 +100,23 @@ namespace TerribleFate
             catch { }
         }
 
+        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Countdown c = (Countdown)((TextBlock)sender).DataContext;
+
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                if (c.Running)
+                    c.Stop();
+                else
+                    c.Start();                
+            }
+
+            if(e.ChangedButton == MouseButton.Middle)
+            {
+                c.ResetCommand.Execute(null);
+            }
+        }
+
     }
 }
