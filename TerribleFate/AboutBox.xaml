@@ -17,7 +17,7 @@
             <Image Grid.Column="0" VerticalAlignment="Center" Width="80" Source="logo.png" />
             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock FontSize="24" Text="Majora´s Clock"  />
-                <TextBlock Text="Version 1.0-beta1" />
+                <TextBlock Text="Version 1.0-beta2" />
                 <TextBlock>
                     <Hyperlink Click="Hyperlink_Click">
                         <TextBlock Text="http://terriblefate.codeplex.com" />

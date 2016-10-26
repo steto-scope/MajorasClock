@@ -48,9 +48,9 @@ namespace MajorasClock
         public const int LWA_COLORKEY = 0x1;
 
 
+      
 
-
-        CountdownControl cc;
+        public CountdownControl cc;
         System.Windows.Media.Imaging.BitmapImage bi;
         Rectangle resolution = Screen.PrimaryScreen.Bounds;
 
@@ -58,7 +58,7 @@ namespace MajorasClock
 
         public Form1()
         {
-
+            
             
             cc = new CountdownControl(Program.Args.Contains("-i"));
             cc.SizeChanged += cc_SizeChanged;

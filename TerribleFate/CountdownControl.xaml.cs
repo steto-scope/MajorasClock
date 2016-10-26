@@ -64,7 +64,7 @@ namespace TerribleFate
         {
             get
             {
-                return DataContext as MainViewModel;
+                return (MainViewModel)DataContext;
             }
         }
 
