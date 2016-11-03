@@ -312,7 +312,7 @@
                 <Button Margin="2" Content="Neu" ToolTipService.VerticalOffset="-62" ToolTip="{x:Static p:Resources.AddCountdown}" Command="{Binding NewCountdownCommand}" Style="{StaticResource NewStyle}"></Button>
             </StackPanel>
         </Grid>
-        <ListView Name="lv" MinHeight="1" ItemsSource="{Binding Countdowns}" Grid.Row="1" Background="Transparent" BorderThickness="0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="320">
+        <ListView Name="lv" MinHeight="1" ItemsSource="{Binding Countdowns}" Grid.Row="1" Background="Transparent" BorderThickness="0"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Background" Value="Transparent" />
