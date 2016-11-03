@@ -192,6 +192,9 @@
   <data name="StartStopCountdown" xml:space="preserve">
     <value>Start/Stop Countdown</value>
   </data>
+  <data name="TextColor" xml:space="preserve">
+    <value>#FFFFFF00</value>
+  </data>
   <data name="Thanks" xml:space="preserve">
     <value>Many thanks for your great work!</value>
   </data>

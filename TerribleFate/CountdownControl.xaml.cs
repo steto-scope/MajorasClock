@@ -38,7 +38,7 @@ namespace TerribleFate
 
         public void InvertColors(bool dark)
         {
-            if (dark)
+           /* if (dark)
             {
                 SolidColorBrush s = (SolidColorBrush)TryFindResource("TextBrush");
                 s.Color = Colors.White;
@@ -57,7 +57,7 @@ namespace TerribleFate
                 dbg.GradientStops.Clear();
                 dbg.GradientStops.Add(new GradientStop() { Color = Color.FromRgb(0, 0, 0), Offset = 0 });
                 dbg.GradientStops.Add(new GradientStop() { Color = Color.FromRgb(128, 128, 128), Offset = 1 });
-            }
+            }*/
         }
 
         public MainViewModel ViewModel

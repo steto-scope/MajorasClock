@@ -9,20 +9,21 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
+            <local:ColorToSolidColorBrushValueConverter x:Key="c2b" />
             <LinearGradientBrush x:Key="DefaultButtonGradient" StartPoint="0,0"  EndPoint="1,1">
-                <GradientStop Color="#FF888888" Offset="0" />
-                <GradientStop Color="White" Offset="1" />
+                <GradientStop Color="{Binding Config.ButtonColor1}" Offset="0" />
+                <GradientStop Color="{Binding Config.ButtonColor2}" Offset="1" />
             </LinearGradientBrush>
             <LinearGradientBrush x:Key="RedButtonGradient">
-                <GradientStop Color="#FFFF8888" Offset="0" />
-                <GradientStop Color="#FFFF0000" Offset="1" />
+                <GradientStop Color="{Binding Config.TrashButtonColor1}" Offset="0" />
+                <GradientStop Color="{Binding Config.TrashButtonColor2}" Offset="1" />
             </LinearGradientBrush>
             <LinearGradientBrush x:Key="ActivatedButtonGradient">
-                <GradientStop Color="#FFFFa588" Offset="0" />
-                <GradientStop Color="#FFFFa500" Offset="1" />
+                <GradientStop Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}, AncestorLevel=1}, Path=DataContext.Config.ToggleButtonColor1}" Offset="0" />
+                <GradientStop Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}, AncestorLevel=1}, Path=DataContext.Config.ToggleButtonColor2}" Offset="1" />
             </LinearGradientBrush>
             <DropShadowEffect x:Key="HoverShadowEffect" Color="{x:Static SystemColors.ActiveCaptionColor}" BlurRadius="10" ShadowDepth="0" />
-            <SolidColorBrush x:Key="TextBrush" Color="White"/>
+            <SolidColorBrush Color="{Binding Config.TextBorderColor}" x:Key="TextBorderBrush" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Background="#01000000" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
@@ -336,7 +337,11 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <TextBlock HorizontalAlignment="Left" Foreground="{DynamicResource TextBrush}" Grid.Row="0" Text="{Binding Settings.Name}" FontSize="18" VerticalAlignment="Top" />
+                            <TextBlock HorizontalAlignment="Left" Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}, AncestorLevel=1}, Path=DataContext.Config.TextColor, Converter={StaticResource c2b}}" Grid.Row="0" Text="{Binding Settings.Name}" FontSize="18" VerticalAlignment="Top">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect BlurRadius="5" ShadowDepth="0"  Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}, AncestorLevel=1}, Path=DataContext.Config.TextBorderColor, Converter={StaticResource c2b}}" />
+                                </TextBlock.Effect>
+                            </TextBlock>
                             <StackPanel  Grid.Row="1"  Orientation="Horizontal" Visibility="{Binding IsMouseOver,Converter={StaticResource pb2v}, ConverterParameter=true}">
                                 <ToggleButton Content="Start/Stop" ToolTip="{x:Static p:Resources.StartStopCountdown}" IsChecked="{Binding StartStop, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Style="{StaticResource PlayPauseStyle}" Visibility="{Binding Settings.UseDuration, Converter={StaticResource b2v}}" Margin="0,0,15,0" />
                                 <Button Content="Edit" ToolTip="{x:Static p:Resources.EditCountdown}"  Style="{StaticResource EditStyle}" Command="{Binding EditCommand}" />
@@ -348,8 +353,18 @@ AncestorType={x:Type ListView}}, Path=DataContext.DeleteCommand}" CommandParamet
                             </StackPanel>
                         </Grid>
                         <StackPanel Grid.Column="1">
-                            <TextBlock Foreground="{DynamicResource TextBrush}" Text="{Binding Left, Converter={StaticResource tsts}}" MouseDown="TextBlock_MouseDown"  HorizontalAlignment="Right" FontSize="28" />
-                            <TextBlock Foreground="{DynamicResource TextBrush}" Text="{Binding CurrentEndDate}" HorizontalAlignment="Right" />
+                            <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}, AncestorLevel=1}, Path=DataContext.Config.TextColor, Converter={StaticResource c2b}}" Text="{Binding Left, Converter={StaticResource tsts}}" MouseDown="TextBlock_MouseDown"  HorizontalAlignment="Right" FontSize="28">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect BlurRadius="5" ShadowDepth="0"  Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}, AncestorLevel=1}, Path=DataContext.Config.TextBorderColor, Converter={StaticResource c2b}}" />
+                                </TextBlock.Effect>
+                            </TextBlock>
+
+                            <TextBlock  Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}, AncestorLevel=1}, Path=DataContext.Config.TextColor, Converter={StaticResource c2b}}" Text="{Binding CurrentEndDate}" HorizontalAlignment="Right">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect BlurRadius="5" ShadowDepth="0"  Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}, AncestorLevel=1}, Path=DataContext.Config.TextBorderColor, Converter={StaticResource c2b}}" />
+                                </TextBlock.Effect>
+                            </TextBlock>
+
                         </StackPanel>
 
                     </Grid>

@@ -12,6 +12,7 @@ namespace TerribleFate
     [XmlInclude(typeof(MatrixTransform))]
     public class AppSettings : BaseObject
     {
+        public static AppSettings C { get; set; }
 
         static AppSettings()
         {
@@ -25,10 +26,61 @@ namespace TerribleFate
 
         public static string ConfigSaveFilePath { get; private set; }
 
-        public Brush TextBrush
+        [XmlElement(Type = typeof(XmlColor))]
+        public Color TextColor
         {
-            get { return Get<Brush>("TextBrush"); }
-            set { Set("TextBrush", value); }
+            get { return Get<Color>("TextColor"); }
+            set { Set("TextColor", value); }
+        }
+
+        [XmlElement(Type = typeof(XmlColor))]
+        public Color ButtonColor1
+        {
+            get { return Get<Color>("ButtonColor1"); }
+            set { Set("ButtonColor1", value); }
+        }
+
+        [XmlElement(Type = typeof(XmlColor))]
+        public Color ButtonColor2
+        {
+            get { return Get<Color>("ButtonColor2"); }
+            set { Set("ButtonColor2", value); }
+        }
+
+        [XmlElement(Type = typeof(XmlColor))]
+        public Color TrashButtonColor1
+        {
+            get { return Get<Color>("TrashButtonColor1"); }
+            set { Set("TrashButtonColor1", value); }
+        }
+
+        [XmlElement(Type = typeof(XmlColor))]
+        public Color TrashButtonColor2
+        {
+            get { return Get<Color>("TrashButtonColor2"); }
+            set { Set("TrashButtonColor2", value); }
+        }
+
+        [XmlElement(Type = typeof(XmlColor))]
+        public Color ToggleButtonColor1
+        {
+            get { return Get<Color>("ToggleButtonColor1"); }
+            set { Set("ToggleButtonColor1", value); }
+        }
+
+        [XmlElement(Type = typeof(XmlColor))]
+        public Color ToggleButtonColor2
+        {
+            get { return Get<Color>("ToggleButtonColor2"); }
+            set { Set("ToggleButtonColor2", value); }
+        }
+
+
+        [XmlElement(Type = typeof(XmlColor))]
+        public Color TextBorderColor
+        {
+            get { return Get<Color>("TextBorderColor"); }
+            set { Set("TextBorderColor", value); }
         }
 
 
@@ -46,9 +98,19 @@ namespace TerribleFate
 
         public AppSettings()
         {
-            TextBrush = new SolidColorBrush(Colors.White);
+            TextColor = Colors.White;
+            TextBorderColor = Colors.Black;
+            ButtonColor1 = (Color)ColorConverter.ConvertFromString("#FF888888");
+            ButtonColor2 = (Color)ColorConverter.ConvertFromString("#FFFFFFFF");
+            TrashButtonColor1 = (Color)ColorConverter.ConvertFromString("#FFFF8888");
+            TrashButtonColor2 = (Color)ColorConverter.ConvertFromString("#FFFF0000");
+            ToggleButtonColor1 = (Color)ColorConverter.ConvertFromString("#FFFFa588");
+            ToggleButtonColor2 = (Color)ColorConverter.ConvertFromString("#FFFFa500");
+
             Left = 0;
             Top = 0;
+
+            C = this;
         }
 
 

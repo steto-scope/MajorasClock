@@ -131,7 +131,7 @@ namespace TerribleFate
 
         void MainViewModel_SizeChanged(object sender, EventArgs e)
         {
-            SaveConfig();
+           // SaveConfig();
         }
 
         void Countdowns_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
