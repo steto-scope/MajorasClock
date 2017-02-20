@@ -113,9 +113,16 @@ namespace TerribleFate
             Running = true;
             while (Elapsed < Settings.Duration.TotalSeconds)
             {
-                Elapsed++;
+                //start / pause functionality
                 if (tok.IsCancellationRequested)
                     break;
+                
+                Elapsed++;
+
+                //directly exit when timer expires (don't wait an additional second)
+                if (Elapsed >= Settings.Duration.TotalSeconds)
+                    break;
+
                 await Task.Delay(1000);
             }
             Running = false;

@@ -32,7 +32,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
                         <CheckBox Content="{x:Static p:Resources.Interval}" IsChecked="{Binding UseDuration,Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"/>
-                    <t:TimePicker  Width="120" Value="{Binding Duration, Converter={StaticResource stsp}}" />
+                    <t:TimePicker Minimum="00:01"  Width="120" Value="{Binding Duration, Converter={StaticResource stsp}}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                         <CheckBox Content="{x:Static p:Resources.Date}" IsChecked="{Binding UseDate,Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"/>
