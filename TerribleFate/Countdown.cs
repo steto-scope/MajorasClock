@@ -40,7 +40,7 @@ namespace TerribleFate
         {
             get {
                 if(Settings.UseDuration)
-                    return TimeSpan.FromSeconds(Settings.Duration.TotalSeconds - Elapsed); 
+                    return TimeSpan.FromSeconds(Remaining); 
                 else
                 {
                     if ((Settings.EndDate - DateTime.Now).TotalSeconds < 0)
@@ -53,16 +53,17 @@ namespace TerribleFate
 
         public DateTime CurrentEndDate
         {
-            get {
+            get 
+            {
                 if (Settings.UseDate)
                     return Settings.EndDate;
-                return DateTime.Now.Add(new TimeSpan(0, 0, (int)(Settings.Duration.TotalSeconds - Elapsed))); }
+                return DateTime.Now.Add(new TimeSpan(0, 0, (int)Remaining)); }
         }
 
-        public long Elapsed
+        public int Remaining
         {
-            get { return Get<long>("Elapsed"); }
-            set { Set("Elapsed", value); OnPropertyChanged("Left"); }
+            get { return Get<int>("Remaining"); }
+            set { Set("Remaining", value); OnPropertyChanged("Left"); OnPropertyChanged("CurrentEndDate"); }
         }
 
         Task t;
@@ -74,10 +75,11 @@ namespace TerribleFate
             {
 
                 if (Settings.UseDate)
-                    if (!(Elapsed < (Settings.EndDate-DateTime.Now).TotalSeconds))
-                     return; 
+                    if (Remaining < 1)
+                        ResetCountdown();
+
                 if (Settings.UseDuration)
-                    if (!(Elapsed < Settings.Duration.TotalSeconds))
+                    if (Remaining < 1)
                         ResetCountdown();
 
                 ct = new CancellationTokenSource();
@@ -94,9 +96,9 @@ namespace TerribleFate
         {
             if (Settings.UseDuration)
             {
-                if (!(Elapsed < Settings.Duration.TotalSeconds) && EnableNotifications)
+                if (Remaining < 1 && EnableNotifications)
                     ShowNotifications();
-                if (!(Elapsed < Settings.Duration.TotalSeconds) && EnableActions)
+                if (Remaining < 1 && EnableActions)
                     ExecuteActions();
             }
             if(Settings.UseDate)
@@ -111,16 +113,16 @@ namespace TerribleFate
         async Task CountDuration(CancellationToken tok)
         {
             Running = true;
-            while (Elapsed < Settings.Duration.TotalSeconds)
+            while (Remaining > 0)
             {
                 //start / pause functionality
                 if (tok.IsCancellationRequested)
                     break;
                 
-                Elapsed++;
+                Remaining--;
 
                 //directly exit when timer expires (don't wait an additional second)
-                if (Elapsed >= Settings.Duration.TotalSeconds)
+                if (Remaining < 1)
                     break;
 
                 await Task.Delay(1000);
@@ -151,9 +153,9 @@ namespace TerribleFate
             if (Settings.UseDuration)
             {
                 if (el == 0)
-                    Elapsed = 0;
+                    Remaining = (int)Settings.Duration.TotalSeconds;
                 else
-                    Elapsed = Math.Max(0,(long)Settings.Duration.Subtract(TimeSpan.FromSeconds(el)).TotalSeconds);
+                    Remaining = Math.Max(0,(int)TimeSpan.FromSeconds(el).TotalSeconds);
             }
             else
             {
@@ -161,7 +163,7 @@ namespace TerribleFate
                 {
                     DateTime newend = DateTime.Now.Add(TimeSpan.FromSeconds(el));
                     Settings.EndDate = newend;
-                    Elapsed = (long)newend.Subtract(DateTime.Now).TotalSeconds;
+                    Remaining = (int)newend.Subtract(DateTime.Now).TotalSeconds;
                 }
             }
         }
