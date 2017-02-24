@@ -18,6 +18,7 @@ namespace TerribleFate
 
         public Countdown()
         {
+           
             Guid = Guid.NewGuid();
             EnableNotifications = true;
             EnableActions = true;
@@ -38,14 +39,15 @@ namespace TerribleFate
 
         public TimeSpan Left
         {
-            get {
-                if(Settings.UseDuration)
-                    return TimeSpan.FromSeconds(Remaining); 
+            get
+            {
+                if (Settings.UseDuration)
+                    return TimeSpan.FromSeconds(Remaining);
                 else
                 {
                     if ((Settings.EndDate - DateTime.Now).TotalSeconds < 0)
                         return new TimeSpan();
-                    return Settings.EndDate - DateTime.Now; 
+                    return Settings.EndDate - DateTime.Now;
                 }
             }
 
@@ -53,11 +55,12 @@ namespace TerribleFate
 
         public DateTime CurrentEndDate
         {
-            get 
+            get
             {
                 if (Settings.UseDate)
                     return Settings.EndDate;
-                return DateTime.Now.Add(new TimeSpan(0, 0, (int)Remaining)); }
+                return DateTime.Now.Add(new TimeSpan(0, 0, (int)Remaining));
+            }
         }
 
         public int Remaining
@@ -101,7 +104,7 @@ namespace TerribleFate
                 if (Remaining < 1 && EnableActions)
                     ExecuteActions();
             }
-            if(Settings.UseDate)
+            if (Settings.UseDate)
             {
                 if (!(DateTime.Now < Settings.EndDate) && EnableNotifications)
                     ShowNotifications();
@@ -118,7 +121,7 @@ namespace TerribleFate
                 //start / pause functionality
                 if (tok.IsCancellationRequested)
                     break;
-                
+
                 Remaining--;
 
                 //directly exit when timer expires (don't wait an additional second)
@@ -148,14 +151,14 @@ namespace TerribleFate
             ct.Cancel();
         }
 
-        public void ResetCountdown(int el=0)
+        public void ResetCountdown(int el = 0)
         {
             if (Settings.UseDuration)
             {
                 if (el == 0)
                     Remaining = (int)Settings.Duration.TotalSeconds;
                 else
-                    Remaining = Math.Max(0,(int)TimeSpan.FromSeconds(el).TotalSeconds);
+                    Remaining = Math.Max(0, (int)TimeSpan.FromSeconds(el).TotalSeconds);
             }
             else
             {
@@ -206,7 +209,7 @@ namespace TerribleFate
         public bool EnableNotifications
         {
             get { return Get<bool>("EnableNotifications"); }
-            set { Set("EnableNotifications", value);  }
+            set { Set("EnableNotifications", value); }
         }
         public bool EnableActions
         {
@@ -227,18 +230,16 @@ namespace TerribleFate
             if (!EnableNotifications)
                 return;
 
-            if(Settings.NotifyBySound && Settings.SoundToPlay!=null)
+            if (Settings.NotifyBySound && Settings.SoundToPlay != null)
             {
-                if(File.Exists(Settings.SoundToPlay))
-                {
-                    player = new SoundPlayer(Settings.SoundToPlay);
+                player = Utils.GetSoundPlayer(Settings.SoundToPlay); 
+                if (player != null)
                     player.Play();
-                }
             }
 
-            if(Settings.NotifyByOverlay)
+            if (Settings.NotifyByOverlay)
             {
-                Process.Start("notifier.exe", "-message \""+this.Settings.Name+"\" -g "+Guid.ToString());
+                Process.Start("notifier.exe", "-message \"" + this.Settings.Name + "\" -g " + Guid.ToString());
                 //Overlay o = new TerribleFate.Overlay(this);
                 //o.Show();
             }
@@ -292,7 +293,7 @@ namespace TerribleFate
             EditWindow w = new EditWindow(Settings);
             w.ShowDialog();
             CountdownSettings s = w.Settings;
-            if(s!=null)
+            if (s != null)
             {
                 Settings = s;
                 if (Settings.UseDate)
@@ -306,7 +307,7 @@ namespace TerribleFate
         }
 
 
-        
+
         [XmlIgnore]
         public bool StartStop
         {

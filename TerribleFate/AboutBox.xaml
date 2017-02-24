@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:p="clr-namespace:TerribleFate.Properties"
         WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize"
-        Title="About" Height="300" Width="300">
+        Title="About" Height="400" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -34,6 +34,15 @@
                     <TextBlock>
                         <Hyperlink Click="Hyperlink_Click_1">
                             <TextBlock Text="http://modernuiicons.com/" />
+                        </Hyperlink>
+                     </TextBlock>
+                </StackPanel>
+                <StackPanel Margin="0,10,0,0">
+                    <TextBlock Text="Alarm Sounds" />
+                    <TextBlock Text="freesound.org" />
+                    <TextBlock>
+                        <Hyperlink Click="Hyperlink_Click_2">
+                            <TextBlock Text="http://freesound.org/" />
                         </Hyperlink>
                      </TextBlock>
                 </StackPanel>

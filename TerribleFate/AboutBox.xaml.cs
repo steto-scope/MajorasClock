@@ -34,5 +34,10 @@ namespace TerribleFate
         {
             Process.Start("http://p.yusukekamiyamane.com/");
         }
+
+        private void Hyperlink_Click_2(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://freesound.org/");
+        }
     }
 }

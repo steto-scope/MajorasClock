@@ -90,6 +90,13 @@ namespace TerribleFate
             set { Set("SoundToPlay", value); }
         }
 
+        public  IEnumerable<string> BuiltInSounds
+        {
+            get
+            {
+                return new string[]{SoundToPlay}.Union(Utils.GetBuiltInSounds());
+            }
+        }
 
         public bool NotifyBeforeStay
         {

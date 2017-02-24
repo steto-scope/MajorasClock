@@ -32,11 +32,11 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
                         <CheckBox Content="{x:Static p:Resources.Interval}" IsChecked="{Binding UseDuration,Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"/>
-                    <t:TimePicker Minimum="00:01"  Width="120" Value="{Binding Duration, Converter={StaticResource stsp}}" />
+                        <t:TimePicker Minimum="00:01"   Width="120" Value="{Binding Duration, Converter={StaticResource stsp}}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                         <CheckBox Content="{x:Static p:Resources.Date}" IsChecked="{Binding UseDate,Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"/>
-                    <t:DateTimePicker Value="{Binding EndDate}" Name="datetimepicker" />
+                        <t:DateTimePicker Value="{Binding EndDate}"  Name="datetimepicker" />
                 </StackPanel>
             </Grid>
             </StackPanel>
@@ -45,8 +45,11 @@
             <StackPanel Margin="5">
                 <CheckBox Content="{x:Static p:Resources.PlaySound}" IsChecked="{Binding NotifyBySound}" />
                 <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
-                    <TextBox Width="170" Text="{Binding SoundToPlay, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Name="sndPath" />
-                    <Button Content="{x:Static p:Resources.Browse}" Click="Button_Click_2" />
+                    <!--<TextBox Width="170" Text="{Binding SoundToPlay, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" Name="sndPath" />-->
+                    <ComboBox IsEnabled="{Binding NotifyBySound}" IsEditable="False" Width="200" SelectedItem="{Binding SoundToPlay, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" ItemsSource="{Binding BuiltInSounds}">
+                        
+                    </ComboBox>
+                    <!-- <Button Content="{x:Static p:Resources.Browse}" Click="Button_Click_2" />-->
                 </StackPanel>
                 <!--<CheckBox Content="Tray-Benachrichtigung" IsChecked="{Binding NotifyByTray}" />-->
                 <CheckBox Content="{x:Static p:Resources.OverlayNotify}" IsChecked="{Binding NotifyByOverlay}" />

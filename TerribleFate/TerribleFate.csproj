@@ -98,6 +98,7 @@
     <Compile Include="ColorToSolidColorBrushConverter.cs" />
     <Compile Include="StringToTimeSpanConverter.cs" />
     <Compile Include="TimeSpanToStringConverter.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="XmlColor.cs" />
     <Page Include="AboutBox.xaml">
       <SubType>Designer</SubType>
@@ -184,6 +185,12 @@
     <Resource Include="Icons\appbar.control.pause.png" />
     <Resource Include="Icons\appbar.control.play.png" />
     <Resource Include="Icons\appbar.control.rewind.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="click.wav" />
+    <EmbeddedResource Include="collected.wav" />
+    <EmbeddedResource Include="ding.wav" />
+    <EmbeddedResource Include="wave.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
