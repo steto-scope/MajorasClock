@@ -1,5 +1,11 @@
 # MajorasClock
 
+![UI](http://blog.recursivebytes.com/screenshots/ui.png "UI showing countdowns")
+
+![UI Menu](http://blog.recursivebytes.com/screenshots/ui_menu.png "When moving the mouse over the UI several options can be selected")
+
+![UI Menu](http://blog.recursivebytes.com/screenshots/ui_notify.png "Visual notification when timer expires, including options to reset the timer or delay it a certain amount of time")
+
 ## Features
 
 * 2 types of countdown: date-based and interval-based
